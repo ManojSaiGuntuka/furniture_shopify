@@ -36,10 +36,7 @@ class Shopify {
 	
 	//Constructing store url
 	private function storeUrl(){	
-						return "https://".$this->api_key.":".$this->shared_secret."@".$this->store;		
-
-
-				
+		return "https://".$this->api_key.":".$this->shared_secret."@".$this->store;		
 	}
 
 	// Fetching customers data from mysql database

@@ -5,6 +5,12 @@
   $UF = new UserFunctions();
 
   $store_data = $UF->getStoreData();
+
+  if(isset($_POST['remove_from_store'])){
+
+    $UF = new UserFunctions();
+    $UF->deleteFromStore($_POST['remove_from_store']);
+  }
 ?>
 
 
@@ -291,9 +297,18 @@
                             </header>
                             <div class="product-collection-carousel_carousel">
                               <div class="product-collection-carousel_product-cards">
+                                <?php
+                                  if(count($store_data) < 1){
+                                    echo '<h2>Currently You Have 0 Products</h2>';
+                                  }
+                                    else{
+                                      ?><h2>You have <?php echo count($store_data)?> Products In Your Store</h2><br/><br/><?php
+                                    }
+                                ?>
                                 <ul>
                                 <?php 
 
+                                  
                                     foreach($store_data as $product){
                                 ?>
 
@@ -346,10 +361,16 @@
                                                 
                                               </div>
                                             </div>
-                                            
+                                            <form method="POST">
+                                              <button type="submit" name="remove_from_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $product['productId']?>" />
+                                                    Remove From Store
+                                              </button>
+                                            </form>
                                           </div>
                                         </div>
+                                        
                                       </div>
+                                      
                                     </div>
                                   </li>
                                   <?php

@@ -26,14 +26,18 @@ include "../inc/connect.php";
         }
         
         function productDeatails($pro_id){
-            $get_product_details = "select * from products where productId = $pro_id";
-            return $this->getConnection()->query($get_product_details);
+    
+            $get_product_details_query = "select * from products where productId = $pro_id";
+            $get_product_details = $this->getConnection()->query($get_product_details_query);
+            return $get_product_details;
+    
         }
 
         function insertIntoWatchList($pro_id){
             $user_id = $this->getUserId();
             $product_details = $this->productDeatails($pro_id);
-            
+
+                $productId = $product_details[0]['productId'];
                 $categoryId = $product_details[0]['categoryId'];
                 $productCode = $product_details[0]['productCode'];
                 $productName = $product_details[0]['productName'];
@@ -52,8 +56,8 @@ include "../inc/connect.php";
                 $variant_inventory_policy = $product_details[0]['variant_inventory_policy'];
                 $available = $product_details[0]['available'];
 
-        $insert_watchlist_query = "insert into watchlist(user_id, categoryId, productCode, productName, productStatus, productImage, shippingDate, productColor, productSize, productPrice, Stock, Description, cat_title, mat_id, vendor_id, variant_inventory_tracker, variant_inventory_policy, available)
-        values('$user_id', '$categoryId', '$productCode', '$productName', '$productStatus', '$productImage', '$shippingDate', '$productColor', '$productSize', '$poroductPrice', '$Stock', '$Description','$cat_title', '$mat_id', '$vendor_id', '$variant_inventory_tracker', '$variant_inventory_policy', '$available')";
+        $insert_watchlist_query = "insert into watchlist(user_id, productId,categoryId, productCode, productName, productStatus, productImage, shippingDate, productColor, productSize, productPrice, Stock, Description, cat_title, mat_id, vendor_id, variant_inventory_tracker, variant_inventory_policy, available)
+        values('$user_id', '$productId','$categoryId', '$productCode', '$productName', '$productStatus', '$productImage', '$shippingDate', '$productColor', '$productSize', '$poroductPrice', '$Stock', '$Description','$cat_title', '$mat_id', '$vendor_id', '$variant_inventory_tracker', '$variant_inventory_policy', '$available')";
 
             $this->getConnection()->query($insert_watchlist_query);
             header("Location: ./importproduct.php");
@@ -75,6 +79,7 @@ include "../inc/connect.php";
 
         function addToStore($product_name, $desc, $newPrice,$watchListId){
             $user_id = $this->getUserId();
+            echo $newPrice;
             
            $insertQuery = "insert into productlist(user_id, productName, Description, productPrice) values('$user_id', '$product_name', '$desc', '$newPrice')";
             
@@ -96,9 +101,10 @@ include "../inc/connect.php";
 
         function deleteFromStore($prod_id){
             $user_id = $this->getUserId();
-            
-            $insertQuery = "delete from productlist where user_id ='$user_id' and product_id='$prod_id'";
-            $this->getConnection()->query($insertQuery);
+            $deleteQuery = "delete from productlist where user_id ='$user_id' and productId='$prod_id'";
+            print_r($this->getConnection()->query($deleteQuery));
+
+            header("Refresh:0");
         }
         
     }

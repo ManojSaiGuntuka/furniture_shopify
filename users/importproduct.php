@@ -6,22 +6,22 @@
 
   $watchListData = $UF->getWatchListProducts();
   
-   //print_r($watchListData);
    if(isset($_POST['import_to_store'])){
+
       $UF = new UserFunctions();
       $watchListData = $UF->getWatchListProducts();
       $pro_Name = $_POST['changed_title'];
       $description = $_POST['new_description'];
       
       $watch_list_id = $_POST['import_to_store'];
-      
       $newPrice = $_POST['newPrice'];
+      
 
       $UF->addToStore($pro_Name, $description, $newPrice, $watch_list_id);
+
    }
 
 ?>
-<!--<link rel="stylesheet" href="./css/bootstrap.min.css"/> -->
 <!DOCTYPE html>
 <html lang="en">
 
