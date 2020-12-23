@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content=" width=device-width, initial-scale=1.0" />
+    <title> Sign in form </title>
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <div class="container">
+                <div id="slider">
+                    <h4 style="font-size:40px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Do you want to rate us ?  </h4>
+
+                </div>
+                <nav>
+                    <ul>
+                        <li> <a href="home.html"> Home </a> </li>
+                        <li> <a href="services.html">Services </a>  </li>
+                        <li> <a href="resources.html"> Resources </a></li>
+                        <li> <a href="gallery.html"> Gallery </a></li>
+                        <li><a href="contact.html"> Contact </a> </li>
+                        <li> <a href="subscribe.html"> Subscribe </a></li>
+
+                    </ul>
+
+                </nav>
+
+            </div>
+        </header>
+        <main>
+            <form method="post" action="https://webdevbasics.net/scripts/demo.php">
+                <p><label for=" myName"> Name:</label>
+                <input type="text" name="myName" id="myName" required="required" placeholder="Full Name" />
+                 </p>
+                <p>
+                    <label for=" myEmail"> Email:</label>
+                    <input type="email" name="myEmail" id="myEmail" required="required" placeholder=".....@...com" />
+                    </p>
+                <p>
+                    <label for="myRating"> Rating (1 - 10): </label>
+                    <input type="range" name="myRating" id=" myRating" min="1" max="10" />
+                    </p>
+                    <label for=" mycomments"> Comments:</label>
+                    <textarea name="myComments" id="myComments" rows="2" cols="20"></textarea>
+                    <input id="mySubmit" type="submit" value="Submit" />
+</form>
+        
+    </main>
+        <footer>
+            <p> ...............PVT.LTD,<small> Copyright &copy; Bishnu 2019 </small> </p>
+        </footer>
+</div> 
+    
+</body>
+</html>
