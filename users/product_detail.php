@@ -13,13 +13,6 @@ if (!empty($_GET)) {
         header("location: home.php");
         exit;
     }
-
-
- function getProductLists(){
-      $UF = new UserFunctions();
-
-      $UF->getProductListForUser();
-   }
     
    if(isset($_POST['onImport'])){
       $UF = new UserFunctions();

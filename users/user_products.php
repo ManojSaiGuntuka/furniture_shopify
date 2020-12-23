@@ -1,4 +1,15 @@
-]<!DOCTYPE html>
+<?php
+
+  include "./userFunctions.php";
+  
+  $UF = new UserFunctions();
+
+  $store_data = $UF->getStoreData();
+?>
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -282,26 +293,19 @@
                               <div class="product-collection-carousel_product-cards">
                                 <ul>
                                 <?php 
-                
-                 require_once("../inc/connect.php");
-                 
-                 $query = "Select * from products";
-                 $select_all_products_query = mysqli_query($conn, $query);
-                                              while($row1= mysqli_fetch_assoc($select_all_products_query)){
 
-                                            
-                
-                ?>
+                                    foreach($store_data as $product){
+                                ?>
 
                                   <li>
                                     <div class="product-card-wrapper">
                                       <div class="panel expanding-panel product-card">
                                         <div class="panel-header-with-image">
                                           <div class="product-card_anchor">
-                                            <img src="images/<?php echo $row1['productImage']?>" alt="" />
+                                            <img src="images/<?php echo $product['productImage']?>" alt="" />
                                           </div>
                                           <div class="discount-notice">
-                                            <span class="old-price"><!--C <?php echo $row1['productPrice']?>--></span>
+                                            <span class="old-price"><!--C <?php echo $product['productPrice']?>--></span>
                                             <span class="new-discount"></span>
                                           </div>
                                         </div>
@@ -311,13 +315,13 @@
                                               <div class="product-card-meta">
                                                 <div class="product-card-title">
                                                   <a class="product-card-link">
-                                                    <?php echo $row1['productName']?>
+                                                    <?php echo $product['productName']?>
                                                   </a>
                                                 </div>
                                               </div>
                                               <div class="product-price-wrapper">
                                                 <h4>
-                                                  <span class="product-card-price">C$ <?php echo $row1['productPrice']?></span>
+                                                  <span class="product-card-price">C$ <?php echo $product['productPrice']?></span>
                                                 </h4>
                                               </div>
                                               <span class="product-card-subtitle">
@@ -336,7 +340,7 @@
                                                     <svg class="icon-star"></svg>
                                                     <svg class="icon-star"></svg>
                                                   </div>
-                                                  <label class="product-card_reviews-count">Stock-<?php echo $row1['Stock'] ?></label>
+                                                  <label class="product-card_reviews-count">Stock-<?php echo $product['Stock'] ?></label>
                                                 </div>
                                                 
                                                 
