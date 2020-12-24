@@ -56,8 +56,8 @@ include "../inc/connect.php";
                 $variant_inventory_policy = $product_details[0]['variant_inventory_policy'];
                 $available = $product_details[0]['available'];
 
-        $insert_watchlist_query = "insert into watchlist(user_id, productId,categoryId, productCode, productName, productStatus, productImage, shippingDate, productColor, productSize, productPrice, Stock, Description, cat_title, mat_id, vendor_id, variant_inventory_tracker, variant_inventory_policy, available)
-        values('$user_id', '$productId','$categoryId', '$productCode', '$productName', '$productStatus', '$productImage', '$shippingDate', '$productColor', '$productSize', '$poroductPrice', '$Stock', '$Description','$cat_title', '$mat_id', '$vendor_id', '$variant_inventory_tracker', '$variant_inventory_policy', '$available')";
+            $insert_watchlist_query = "insert into watchlist(user_id, productId,categoryId, productCode, productName, productStatus, productImage, shippingDate, productColor, productSize, productPrice, Stock, Description, cat_title, mat_id, vendor_id, variant_inventory_tracker, variant_inventory_policy, available)
+            values('$user_id', '$productId','$categoryId', '$productCode', '$productName', '$productStatus', '$productImage', '$shippingDate', '$productColor', '$productSize', '$poroductPrice', '$Stock', '$Description','$cat_title', '$mat_id', '$vendor_id', '$variant_inventory_tracker', '$variant_inventory_policy', '$available')";
 
             $this->getConnection()->query($insert_watchlist_query);
             header("Location: ./importproduct.php");
@@ -77,16 +77,22 @@ include "../inc/connect.php";
             $this->getConnection()->query($delete_watchlist_query);
         }
 
-        function addToStore($product_name, $desc, $newPrice,$watchListId){
-            $user_id = $this->getUserId();
-            echo $newPrice;
-            
-           $insertQuery = "insert into productlist(user_id, productName, Description, productPrice) values('$user_id', '$product_name', '$desc', '$newPrice')";
-            
-            $this->getConnection()->query($insertQuery);
-            $this->deleteWatchList($watchListId);
+        function addToShopify($productList_id){
+            header("Location: ../import_products.php?pid= $product_id");
+        }
 
-            header("Location: ./user_products.php");
+        function addToStore($product_name, $desc, $newPrice, $watchListId, $product_id){
+
+            $user_id = $this->getUserId();
+            
+            $insertQuery = "insert into productlist(user_id, product_id, productName, Description, productPrice) values('$user_id', '$product_id','$product_name', '$desc', '$newPrice')";
+            //mysqli_query($conn, $insertQuery)
+            $this->getConnection()->query($insertQuery);
+
+            $this->deleteWatchList($watchListId);
+            
+            //header("Location: ./user_products.php");
+
         }
 
         function getStoreData(){

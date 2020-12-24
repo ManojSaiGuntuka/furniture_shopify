@@ -15,9 +15,10 @@
       
       $watch_list_id = $_POST['import_to_store'];
       $newPrice = $_POST['newPrice'];
-      
 
-      $UF->addToStore($pro_Name, $description, $newPrice, $watch_list_id);
+      $cur_pro_id = $_POST['item-id'];
+
+      $UF->addToStore($pro_Name, $description, $newPrice, $watch_list_id, $cur_pro_id);
 
    }
 
@@ -533,6 +534,7 @@
                                                                              </div>
                                                                             </div>
                                                                             <input type="text" name="newPrice" value="$<?php echo $data['productPrice']?>"/>
+                                                                            <input type="hidden" id="ipaddr" name="item-id" value="<?php echo $data['productId']; ?>">
                                                                           </div>
                                                                       </div>
                                                                   </div>
@@ -545,6 +547,7 @@
                                                                     </div>
                                                                 </div>
                                                               </div>
+                                                              
                                                             <!--<input type="submit" value="Import To Store" name="import_to_store" class="push-to-shop btn btn-primary btn-regular"/> -->
                                                             <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $data['watchListId']?>" />
                                                             Import To Store

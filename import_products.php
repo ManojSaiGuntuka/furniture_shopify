@@ -42,9 +42,11 @@ class Shopify {
 	// Fetching customers data from mysql database
 	private function fetchProducts(){
 		if (!empty($_GET)) {
+		
         $pid = $_GET["pid"];
-		$query = "select * from products  WHERE productId = $pid";		
+		$query = "select * from productlist  WHERE productId = $pid";		
 		$rows = $this->db->query($query);
+		print_r($this->db->query($query));
 		return $rows;
 	}
 		
@@ -199,7 +201,7 @@ class Shopify {
 // Launching migration process now
 $Shopify = new Shopify();
 $results = $Shopify->processProductsMigration();
-echo $results;
+
 //echo "<pre>"; print_r($results);
 
 ?>
