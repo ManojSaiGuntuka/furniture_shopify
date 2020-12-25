@@ -5,22 +5,31 @@
   $UF = new UserFunctions();
 
   $watchListData = $UF->getWatchListProducts();
-  
+
    if(isset($_POST['import_to_store'])){
 
       $UF = new UserFunctions();
-      $watchListData = $UF->getWatchListProducts();
-      $pro_Name = $_POST['changed_title'];
-      $description = $_POST['new_description'];
-      
-      $watch_list_id = $_POST['import_to_store'];
-      $newPrice = $_POST['newPrice'];
+        
+        $pro_Name = $_POST['changed_title'][0];
+        $description = $_POST['new_description'][0];
+        $watch_list_id = $_POST['import_to_store'];
+        $newPrice = $_POST['newPrice'][0];
+        $productImage = $_POST['imageOfProduct'][0];
 
       $cur_pro_id = $_POST['item-id'];
-
-      $UF->addToStore($pro_Name, $description, $newPrice, $watch_list_id, $cur_pro_id);
+      $UF->addToStore($pro_Name, $description, $newPrice, $productImage, $watch_list_id, $cur_pro_id);
 
    }
+
+   if(isset($_POST['deleteFromWishList'])){
+
+    $UF = new UserFunctions();
+  
+      $watch_list_id = $_POST['deleteFromWishList'];
+
+    $UF->deleteWatchList($watch_list_id);
+    header("Refresh:0");
+ }
 
 ?>
 <!DOCTYPE html>
@@ -39,6 +48,7 @@
     <script src="js/owl.carousel.js"></script>
     <script src="js/owl.navigation.js"></script>
   <title>Import List</title>
+
 </head>
 
 <body>
@@ -458,12 +468,20 @@
                                       <div>
                                       <?php
                                         if(count($watchListData) > 0){
-                                          foreach($watchListData as $data){
+                                          for($index = 0; $index < count($watchListData); $index++){
                                       ?>
+                                      <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
+                                                            Import To Store
+                                      </button>
+                                      <button type="submit" name="deleteFromWishList" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
+                                                            Delete From Watchlist
+                                      </button>
                                           <div class="product-main-tab">
+                                          
                                               <div class="product-main-tab_image-container">
                                                   <div class="product-img">
-                                                      <img class="import-list-main-tab_image" src="images/<?php echo $data['productImage']?>" alt="furniture">
+                                                      <input type="hidden" id="ipaddr" name="imageOfProduct[]" value="<?php echo $watchListData[$index]['productImage']; ?>">
+                                                      <img class="import-list-main-tab_image" value="./images/<?php echo $watchListData[$index]['productImage'];?>" src="images/<?php echo $watchListData[$index]['productImage']?>" alt="furniture">
                                                   </div>
                                               </div>
                                               <div class="product-main-tab_description">
@@ -485,7 +503,7 @@
                                                   <div class="product-main-tab_title-text">
                                                       <img class="product-main-tab_logo" src="image/fur.png">
                                                       <span>
-                                                          <?php print_r($data['productName']);?>
+                                                          <?php print_r($watchListData[$index]['productName']);?>
                                                       </span>
                                                   </div>
                                                   <div class="row">
@@ -505,8 +523,10 @@
                                                   <div class="">
                                                       <div class="input-block product-main-tab_title-input" label="Change title" placeholder="Change title" maxlength="225" value="" >
                                                         <div class="input-field input-field-has-label" placeholder="Change title" maxlength="225">
-                                         <!----> <input name="changed_title" value="<?php print_r($data['productName']);?>" maxlength="255" id="input-block-cdb45960-3e70-11eb-ae62-d1bc52611a4c" type="text" class="form-control"> <!----> <!----> <label for="input-block-cdb45960-3e70-11eb-ae62-d1bc52611a4c" class="label-control">Change title</label> <!----> 
-                                         <label class="label-control" for="input-block">Change title</label>
+                                         <!----> 
+                                                  <input name="changed_title[]" value="<?php print_r($watchListData[$index]['productName']);?>" maxlength="255" id="input-block-cdb45960-3e70-11eb-ae62-d1bc52611a4c" type="text" class="form-control"> <!----> <!----> 
+                                                  <label class="label-control" for="input-block">Change title</label>
+
                                                         </div>
                                                       </div>
                                                       <div>
@@ -515,8 +535,8 @@
                                                                   <div class="multiselect_select"></div>
                                                                   <div class="multiselect_tags">
                                                                       
-                                                                        <textarea id="w3review" name="new_description" rows="4" cols="50">
-                                                                                 <?php echo $data['Description']?>
+                                                                        <textarea id="w3review" name="new_description[]" rows="4" cols="50">
+                                                                                 <?php echo $watchListData[$index]['Description']?>
                                                                               </textarea>
                                                                   </div>
                                                               </div>
@@ -533,8 +553,8 @@
                                                                                  
                                                                              </div>
                                                                             </div>
-                                                                            <input type="text" name="newPrice" value="$<?php echo $data['productPrice']?>"/>
-                                                                            <input type="hidden" id="ipaddr" name="item-id" value="<?php echo $data['productId']; ?>">
+                                                                            <input type="text" name="newPrice[]" value="$<?php echo $watchListData[$index]['productPrice']?>"/>
+                                                                            <input type="hidden" id="ipaddr" name="item-id[]" value="<?php echo $watchListData[$index]['productId']; ?>">
                                                                           </div>
                                                                       </div>
                                                                   </div>
@@ -543,15 +563,12 @@
                                                                 <div class="multiselect" tabindex="-1" max-height="600">
                                                                     <div class="multiselect_select"></div>
                                                                     <div class="multiselect_tags">
-                                                                        <span class="multiselect_placeholder">  <?php echo $data['Stock']?></span>
+                                                                        <span class="multiselect_placeholder">  <?php echo $watchListData[$index]['Stock']?></span>
                                                                     </div>
                                                                 </div>
+                                                                
                                                               </div>
-                                                              
-                                                            <!--<input type="submit" value="Import To Store" name="import_to_store" class="push-to-shop btn btn-primary btn-regular"/> -->
-                                                            <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $data['watchListId']?>" />
-                                                            Import To Store
-                                                            </button>
+                                                            
                                                           </div>
                                                       </div>
                                                   </div>
@@ -585,3 +602,4 @@
 </body>
 
 </html>
+

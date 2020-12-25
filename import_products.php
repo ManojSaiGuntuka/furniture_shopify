@@ -43,10 +43,11 @@ class Shopify {
 	private function fetchProducts(){
 		if (!empty($_GET)) {
 		
-        $pid = $_GET["pid"];
+		$pid = $_GET["pid"];
+
 		$query = "select * from productlist  WHERE productId = $pid";		
 		$rows = $this->db->query($query);
-		print_r($this->db->query($query));
+
 		return $rows;
 	}
 		
@@ -98,7 +99,7 @@ class Shopify {
             ],
             'images'=> [
                 [
-                    'src'=> $data['productImage'].jpg,
+                    'src'=> $data['productImage'].'jpg',
                 ]
                 
             ]
@@ -128,10 +129,6 @@ class Shopify {
 		
 		
 		$url = $this->storeUrl()."/admin/products.json";
-		echo $url;
-		
-		
-
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
@@ -149,7 +146,7 @@ class Shopify {
 		}
 		curl_close ($curl);		
 		return $response;
-	
+
 	}
 	
 	
@@ -190,6 +187,7 @@ class Shopify {
 		}
 		
 		$results['end-time'] = date('h:i:s');
+		
 		return json_encode($results);		
 			
 	}
@@ -201,7 +199,7 @@ class Shopify {
 // Launching migration process now
 $Shopify = new Shopify();
 $results = $Shopify->processProductsMigration();
-
+header("Location: ./users/user_products.php");
 //echo "<pre>"; print_r($results);
 
 ?>

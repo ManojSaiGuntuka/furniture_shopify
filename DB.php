@@ -2,8 +2,6 @@
 /**
  *  PDO wrapper for Mysql 
  *
- * @author		Author: Ali khan (pk.linkedin.com/in/p2palikhan) 
- *
  */
 
 
@@ -46,7 +44,7 @@ class DB
             //$this->log = new Log();
 			$this->Connect($db);
 			$this->parameters = array();
-            //date_default_timezone_set('Asia/Karachi');
+
         }
 	
        /**
@@ -105,6 +103,7 @@ class DB
 	 *   You can use this little method if you want to close the PDO connection
 	 *
 	 */
+
 	 	public function CloseConnection()
 	 	{
 	 		# Set the PDO object to null to close the connection

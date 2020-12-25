@@ -48,3 +48,7 @@
 {"message":"connection failed in Init","time":"2020-12-23 11:32:05","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
 {"message":"connection failed in Init","time":"2020-12-23 11:33:46","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
 {"message":"connection failed in Init","time":"2020-12-24 03:23:11","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
+{"message":"connection failed in Init","time":"2020-12-25 09:10:11","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
+{"message":"connection failed in Init","time":"2020-12-25 09:15:40","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
+{"message":"connection failed in Init","time":"2020-12-25 09:21:33","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
+{"message":"connection failed in Init","time":"2020-12-25 09:22:06","ip":"::1","session":{"username":"manojuser","user_id":"1"}}

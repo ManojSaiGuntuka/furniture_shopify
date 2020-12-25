@@ -2,7 +2,6 @@
 
 require_once('../DB.php');
 
-include "../inc/connect.php";
     
     if(session_status() == 1){
         session_start();
@@ -78,20 +77,21 @@ include "../inc/connect.php";
         }
 
         function addToShopify($productList_id){
-            header("Location: ../import_products.php?pid= $product_id");
+            print_r($productList_id);
+            header("Location: ../import_products.php?pid=$productList_id");
         }
 
-        function addToStore($product_name, $desc, $newPrice, $watchListId, $product_id){
+        function addToStore($product_name, $desc, $newPrice, $productImage, $watchListId, $product_id){
 
             $user_id = $this->getUserId();
-            
-            $insertQuery = "insert into productlist(user_id, product_id, productName, Description, productPrice) values('$user_id', '$product_id','$product_name', '$desc', '$newPrice')";
-            //mysqli_query($conn, $insertQuery)
+            $insertQuery = "insert into productlist(user_id, product_id, productName, productPrice,Description,  productImage) values('$user_id', '$product_id','$product_name', '$newPrice', '$desc','$productImage')";
+
+
             $this->getConnection()->query($insertQuery);
 
+            $this->addToShopify($this->getConnection()->lastInsertId());
+
             $this->deleteWatchList($watchListId);
-            
-            //header("Location: ./user_products.php");
 
         }
 
