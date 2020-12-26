@@ -10,11 +10,11 @@
 
       $UF = new UserFunctions();
         
-        $pro_Name = $_POST['changed_title'][0];
-        $description = $_POST['new_description'][0];
+        $pro_Name = $_POST['change_title'];
+        $description = $_POST['new_description'];
         $watch_list_id = $_POST['import_to_store'];
-        $newPrice = $_POST['newPrice'][0];
-        $productImage = $_POST['imageOfProduct'][0];
+        $newPrice = $_POST['newPrice'];
+        $productImage = $_POST['imageOfProduct'];
 
       $cur_pro_id = $_POST['item-id'];
       $UF->addToStore($pro_Name, $description, $newPrice, $productImage, $watch_list_id, $cur_pro_id);
@@ -463,27 +463,17 @@
                                           </div>
                                       </div>
                                   </div>
-                                 <form method="POST">
+                                 
                                   <div class="tabs-body always-display">
                                       <div>
                                       <?php
                                         if(count($watchListData) > 0){
                                           for($index = 0; $index < count($watchListData); $index++){
-                                      ?>
-                                      <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
-                                                            Import To Store
-                                      </button>
-                                      <button type="submit" name="deleteFromWishList" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
-                                                            Delete From Watchlist
-                                      </button>
+                                            ?>
+                                      
                                           <div class="product-main-tab">
                                           
-                                              <div class="product-main-tab_image-container">
-                                                  <div class="product-img">
-                                                      <input type="hidden" id="ipaddr" name="imageOfProduct[]" value="<?php echo $watchListData[$index]['productImage']; ?>">
-                                                      <img class="import-list-main-tab_image" value="./images/<?php echo $watchListData[$index]['productImage'];?>" src="images/<?php echo $watchListData[$index]['productImage']?>" alt="furniture">
-                                                  </div>
-                                              </div>
+                                              
                                               <div class="product-main-tab_description">
                                                   <div class="product-main-tab_title-link">
                                                       <div class="product-main-tab_title-heading">original title :</div>
@@ -521,11 +511,21 @@
                                                       </div>
                                                   </div>
                                                   <div class="">
+                                                    <form method="POST">
+                                                    
+                                                    <div class="product-main-tab_image-container">
+
+                                                      <div class="product-img">
+                                                        <input type="hidden" id="ipaddr" name="imageOfProduct" value="<?php echo $watchListData[$index]['productImage']; ?>">
+                                                        <img class="import-list-main-tab_image" value="./images/<?php echo $watchListData[$index]['productImage'];?>" src="images/<?php echo $watchListData[$index]['productImage']?>" alt="furniture">
+                                                      </div>
+                                                      </div>
+
                                                       <div class="input-block product-main-tab_title-input" label="Change title" placeholder="Change title" maxlength="225" value="" >
                                                         <div class="input-field input-field-has-label" placeholder="Change title" maxlength="225">
-                                         <!----> 
-                                                  <input name="changed_title[]" value="<?php print_r($watchListData[$index]['productName']);?>" maxlength="255" id="input-block-cdb45960-3e70-11eb-ae62-d1bc52611a4c" type="text" class="form-control"> <!----> <!----> 
-                                                  <label class="label-control" for="input-block">Change title</label>
+                                      
+                                                    <input name="change_title" value="<?php print_r($watchListData[$index]['productName']);?>" maxlength="255" id="input-block-cdb45960-3e70-11eb-ae62-d1bc52611a4c" type="text" class="form-control"> <!----> <!----> 
+                                                    <label class="label-control" for="input-block">Change title</label>
 
                                                         </div>
                                                       </div>
@@ -535,7 +535,7 @@
                                                                   <div class="multiselect_select"></div>
                                                                   <div class="multiselect_tags">
                                                                       
-                                                                        <textarea id="w3review" name="new_description[]" rows="4" cols="50">
+                                                                        <textarea id="w3review" name="new_description" rows="4" cols="50">
                                                                                  <?php echo $watchListData[$index]['Description']?>
                                                                               </textarea>
                                                                   </div>
@@ -553,7 +553,7 @@
                                                                                  
                                                                              </div>
                                                                             </div>
-                                                                            <input type="text" name="newPrice[]" value="$<?php echo $watchListData[$index]['productPrice']?>"/>
+                                                                            <input type="text" name="newPrice" value="$<?php echo $watchListData[$index]['productPrice']?>"/>
                                                                             <input type="hidden" id="ipaddr" name="item-id[]" value="<?php echo $watchListData[$index]['productId']; ?>">
                                                                           </div>
                                                                       </div>
@@ -571,6 +571,14 @@
                                                             
                                                           </div>
                                                       </div>
+                                                      
+                                                        <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
+                                                            Import To Store
+                                                        </button>
+                                                        <button type="submit" name="deleteFromWishList" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
+                                                            Delete From Watchlist
+                                                        </button>
+                                                        </form>
                                                   </div>
                                               </div>
                                           </div>
@@ -580,7 +588,7 @@
                                         ?>
                                       </div>
                                   </div>
-                                 </form>
+                                 
                               </div>
                           </div>
                       </div>
