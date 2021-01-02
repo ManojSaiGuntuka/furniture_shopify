@@ -764,3 +764,18 @@
   background-color: #e1e3ff;
 }
 
+.product-options_variant-tag {
+  margin-bottom: 4px;
+  margin-right: 8px;
+  cursor: pointer;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.product-options_variant-img {
+  padding: 0;
+}
+.product-options_variant-img.selected img {
+  margin-top: -2px;
+}

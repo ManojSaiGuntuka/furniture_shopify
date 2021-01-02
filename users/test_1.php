@@ -1078,7 +1078,7 @@
                                                             <td>
                                                                <div class="money-view">
                                                                   <div class="money-view_field money-view_field-original">
-                                                                     <span> C$ 50.20</span>
+                                                                     <span> C$<?php $shipping_charge= ?>50.20</span>
                                                                   </div>
                                                                </div>
                                                             </td>
@@ -1260,12 +1260,6 @@
                                              </div>
                                           </div>
                                        </div>
-									   <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
-                                                            Import To Store
-                                                        </button>
-                                                        <button type="submit" name="deleteFromWishList" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
-                                                            Delete From Watchlist
-                                                        </button>
                                     </div>
                                  </div>
 								 

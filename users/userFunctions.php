@@ -81,10 +81,10 @@ require_once('../DB.php');
             header("Location: ../import_products.php?pid=$productList_id");
         }
 
-        function addToStore($product_name, $desc, $newPrice, $productImage, $watchListId, $product_id){
+        function addToStore($product_name, $desc, $newPrice, $productImage, $watchListId, $product_id, $stock_inv){
 
             $user_id = $this->getUserId();
-            $insertQuery = "insert into productlist(user_id, product_id, productName, productPrice,Description,  productImage) values('$user_id', '$product_id','$product_name', '$newPrice', '$desc','$productImage')";
+            $insertQuery = "insert into productlist(user_id, product_id, productName, productPrice,Description,  productImage, Stock) values('$user_id', '$product_id','$product_name', '$newPrice', '$desc','$productImage','$stock_inv')";
 
 
             $this->getConnection()->query($insertQuery);
