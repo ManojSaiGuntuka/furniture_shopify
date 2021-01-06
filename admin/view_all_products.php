@@ -28,7 +28,7 @@
 						<th>category</th>
 						<th>Code</th>
 						<th>Color</th>
-						<th>Size</th>
+						<th>ProductWeight</th>
 						<th>Price</th>
 						<th>Status</th>						
 						<th>Image</th>
@@ -60,7 +60,7 @@
 							$productPrice = $row['productPrice'];
 							$stock        = $row['Stock'];
 							$Description = $row['Description'];
-							$cat_title = $row['$cat_title'];
+							//$cat_title = $row['$cat_title'];
 							echo "<tr>";
 							
 							echo "<td>$productId </td>";

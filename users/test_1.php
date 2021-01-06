@@ -855,7 +855,7 @@
                                                    </div>
                                                    <div class="tox-sidebar-wrap" >
                                                       <div class="tox-edit-area">
-                                                         <iframe id="tiny-vue_18885963821609270016227_ifr" src="./editor.php" class="tox-edit-area_iframe" allowtransparency="true" frameborder="0" >
+                                                         <iframe id="tiny-vue_18885963821609270016227_ifr" src="editor.html" class="tox-edit-area_iframe" allowtransparency="true" frameborder="0" >
                                                          </iframe>
                                                          <div class="tox-sidebar" role="complementary">
                                                             <div class="tox-sidebar_slider tox-sidebar-sliding-closed" data-alloy-tabstop="true" tabindex="-1" style="width: 0px;">

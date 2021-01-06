@@ -34,7 +34,7 @@ $productSize = $_POST['productSize'];
 $productPrice = $_POST['productPrice'];
 $stock        = $_POST['stock'];
 $Description = $_POST['Description'];
-$cat_title = $_POST['$cat_title']
+$cat_title = $_POST['$cat_title'];
 
 move_uploaded_file($product_image_temp, "./images/$productImage");
 
@@ -118,6 +118,10 @@ $cat_title = $row['cat_title'];
 <input  type="file" name="productImage">
 </div>
 
+<div class= "form-group" hidden>
+<label for= "cat_title"> Category Title </label>
+<input  type="text" name="cat_title">
+</div>
 
 
 <div class= "form-group">

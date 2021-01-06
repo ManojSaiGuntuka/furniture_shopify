@@ -52,10 +52,3 @@
 {"message":"connection failed in Init","time":"2020-12-25 09:15:40","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
 {"message":"connection failed in Init","time":"2020-12-25 09:21:33","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
 {"message":"connection failed in Init","time":"2020-12-25 09:22:06","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 04:34:06","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 05:05:33","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 05:05:35","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 05:07:43","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 05:07:45","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 05:08:23","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
-{"message":"connection failed in Init","time":"2021-01-06 05:08:25","ip":"::1","session":{"username":"manojuser","user_id":"1"}}

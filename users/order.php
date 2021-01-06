@@ -1,4 +1,4 @@
-]<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/owl.theme.default.min.css" />
     <script src="js/owl.carousel.js"></script>
     <script src="js/owl.navigation.js"></script>
+	<script src="../js/shopify.js"></script>
+	
     <title>Product</title>
 </head>
 
@@ -647,12 +649,51 @@
                               <div class="feature-flag-ali-express-api"></div>
                            </div>
                         </div>
-                        <div class="empty-state">
-                           <svg class="empty-import">
-                              <use xlink:href="/images/icons.svg?v=2.10.3#icon-empty-import"></use>
-                           </svg>
-                           <p><span class="empty-state__title">Your Order List is Empty</span> <br> <span class="empty-state__subtitle">No orders matching your search criteria</span></p>
-                        </div>
+						<?php 
+						require_once("../inc/connect.php");
+						 $query = "SELECT * FROM orders ";
+						 $select_all_orders_query = mysqli_query($conn, $query);
+            			                            while($row1= mysqli_fetch_assoc($select_all_orders_query)){
+														
+						
+						
+						
+						?>
+                        <div class="order"><div class="panel"><div data-v-3f2546ba="" class="order-header panel-body"><div data-v-3f2546ba="" class="order-header__statuses"><!----> <div data-v-55495210="" data-v-3f2546ba="" class="order-flag"><span data-v-55495210=""><svg data-v-55495210="" class="icon-base color-info-dark"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark-o"></use></svg></span> <ul data-v-55495210=""><li data-v-55495210=""><button data-v-55495210="" type="button" class="btn btn-basic btn-sm active"><!----> <!----> <span class="btn-title"><svg data-v-55495210="" class="icon-base color-info-dark"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark-o"></use></svg></span> <!----></button></li><li data-v-55495210=""><button data-v-55495210="" type="button" class="btn btn-basic btn-sm"><!----> <!----> <span class="btn-title"><svg data-v-55495210="" class="icon-base color-info"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark"></use></svg></span> <!----></button></li><li data-v-55495210=""><button data-v-55495210="" type="button" class="btn btn-basic btn-sm"><!----> <!----> <span class="btn-title"><svg data-v-55495210="" class="icon-base color-primary"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark"></use></svg></span> <!----></button></li><li data-v-55495210=""><button data-v-55495210="" type="button" class="btn btn-basic btn-sm"><!----> <!----> <span class="btn-title"><svg data-v-55495210="" class="icon-base color-success"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark"></use></svg></span> <!----></button></li><li data-v-55495210=""><button data-v-55495210="" type="button" class="btn btn-basic btn-sm"><!----> <!----> <span class="btn-title"><svg data-v-55495210="" class="icon-base color-warning"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark"></use></svg></span> <!----></button></li><li data-v-55495210=""><button data-v-55495210="" type="button" class="btn btn-basic btn-sm"><!----> <!----> <span class="btn-title"><svg data-v-55495210="" class="icon-base color-danger"><use xlink:href="/images/icons.svg?v=2.10.3#icon-bookmark"></use></svg></span> <!----></button></li></ul></div> <img data-v-3f2546ba="" src="https://cdn.oberlo.com/img/shop-icon-shopify.svg" alt="Shopify Logo" class="order-header__logo"> <div data-v-3f2546ba="" class="order-header__order"><a data-v-3f2546ba="" target="_blank" href="https://clickrippleappfurniture.myshopify.com/admin/orders/3129308545211">
+        <?php echo $row1['orderID'] ?>
+      </a>
+    <?php echo $row1['orderDate'] ?>
+    </div></div> <div data-v-3f2546ba="" class="order-header__order-status"><div data-v-147e2c88="" data-v-3f2546ba="" class="order-status"><span data-v-147e2c88="" class="badge badge-default">
+    UnPaid
+  </span> <span data-v-147e2c88="" class="badge badge-default">
+    Unfulfilled
+  </span></div> <!----></div> <div data-v-3f2546ba="" class="order-header__customer"><span data-v-3f2546ba="">
+      Customer:<?php echo $row1['customerName'] ?>
+    </span> <a data-v-3f2546ba="" href="#">
+      
+    </a> <!----></div></div> <div class="order__banners"><!----> <!----> <!----></div> <div data-v-3651c292="" class="order-body panel-body"><!----> <div data-v-26db1937="" data-v-3651c292="" class="order-supplier"><div data-v-26db1937="" class="order-supplier__wrapper"><div data-v-26db1937="" class="order-supplier__column order-supplier__state"><!----> <div data-v-26db1937="" class="container-flex"><!----> <span class="badge badge-warning">
+      To Order
+    </span></div></div> <div data-v-26db1937="" class="order-supplier__column order-supplier__name"><div data-v-26db1937="" class="order-supplier__icon ali-supplier"></div> <a data-v-26db1937="" href="" target="_blank" class="-margin-left-xs"><div data-v-26db1937="" class="blue-color"> ClickRipple Furniture</div></a></div> <!----> <!----> <div data-v-26db1937="" class="order-supplier__column order-supplier__actions"><div data-v-26db1937="" data-trekkie-id="dropdown" class="popover dropdown order-more-actions order-supplier__action order-supplier__action--desktop order-more-actions--more-actions" suppliers-source="[object Object]"><span class="popover-wrapper"><button type="button" class="dropdown__toggle btn btn-basic btn-regular btn-dropdown" tabindex="0"><!----> <!----> <span class="btn-title"><div><div data-v-500dbcaf="" class="ellipsis-btn ellipsis-btn"><span data-v-500dbcaf="" class="dot"></span> <span data-v-500dbcaf="" class="dot"></span> <span data-v-500dbcaf="" class="dot"></span></div> <div class="title"><div class="desktop-title">
+        Actions
+      </div> <div class="mobile-title">
+        Actions
+      </div></div></div></span> <span class="btn-icon-wrap"><svg class="icon-base"><use xlink:href="/images/icons.svg?v=2.10.3#icon-small-arrow-down"></use></svg></span></button></span> <div class="popover-body popover-body-right"><ul class="dropdown__list"><li tabindex="-1"><button type="button" class="btn btn-basic btn-regular btn-block" tabindex="0"><!----> <!----> <span class="btn-title"><span>Add CR order number</span></span> <!----></button></li><li tabindex="-1"><button type="button" class="btn btn-basic btn-regular btn-block" tabindex="0"><!----> <!----> <span class="btn-title"><span>Mark as shipped</span></span> <!----></button></li></ul></div></div> <div data-v-26db1937="" data-trekkie-id="dropdown" class="popover dropdown order-more-actions order-supplier__action order-supplier__action--mobile order-more-actions--more-actions" suppliers-source="[object Object]"><span class="popover-wrapper"><button type="button" class="dropdown__toggle btn btn-basic btn-regular btn-dropdown" tabindex="0"><!----> <!----> <span class="btn-title"><div><div data-v-500dbcaf="" class="ellipsis-btn ellipsis-btn"><span data-v-500dbcaf="" class="dot"></span> <span data-v-500dbcaf="" class="dot"></span> <span data-v-500dbcaf="" class="dot"></span></div> <div class="title"><div class="desktop-title">
+        Actions
+      </div> <div class="mobile-title">
+        Actions
+      </div></div></div></span> <span class="btn-icon-wrap"><svg class="icon-base"><use xlink:href="/images/icons.svg?v=2.10.3#icon-small-arrow-down"></use></svg></span></button></span> <div class="popover-body popover-body-right"><ul class="dropdown__list"><li tabindex="-1"><button type="button" class="btn btn-basic btn-regular btn-block" tabindex="0"><!----> <!----> <span class="btn-title"><span>Add CR order number</span></span> <!----></button></li><li tabindex="-1"><button type="button" class="btn btn-basic btn-regular btn-block" tabindex="0"><!----> <!----> <span class="btn-title"><span>Mark as shipped</span></span> <!----></button></li></ul></div></div> <!----> <!----> <!----> <!----> <!----></div></div></div> <div data-v-85c95172="" data-v-3651c292="" class="order-items"><div data-v-85c95172="" class="order-items__block"><!----> <div data-v-85c95172="" class="order-item order-items__item"><div class="order-item__image"><img src="" alt="" class="order-thumbnail"></div> <div class="order-item__meta order-item__meta-span"><a href="<!--https://app.oberlo.com/product-sources/459/products/33012648882-->" target="_blank">
+        
+      </a> <h3><?php echo $row1['productName'] ?></h3><span>
+        <br></span>
+      
+      <!----></div> <div class="order-item__price order-item__price--full-width">
+    <?php echo $row1['quantity']?> x <?php echo $row1['price_per_item'] ?> CAD
+  </div> <!----> <div class="order-item__last"><!----> <!----> <!----></div></div> <!----> <!----></div> <!----></div> </div> <div data-v-fb5dde7a="" class="order-note-line"><div data-v-fb5dde7a="" class="order-note-line__description">
+      
+    </div> <div data-v-fb5dde7a="" class="order-note-line__action"><button data-v-fb5dde7a="" type="button" class="btn btn-basic btn-sm"><!----> <!----> <span class="btn-title">
+        Add note
+      </span> <!----></button></div></div></div></div>
+													<?php }?>
                         <div class="pagination-wrapper" style="display: none;">
                            <ul class="pagination">
                               <li>
