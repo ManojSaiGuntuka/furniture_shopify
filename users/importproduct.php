@@ -9,7 +9,7 @@
     if(isset($_POST['import_to_store'])){
    
        $UF = new UserFunctions();
-         
+         echo " Hello";
          $pro_Name = $_POST['change_title'];
          $description = $_POST['new_description'];
          $watch_list_id = $_POST['import_to_store'];
@@ -67,7 +67,7 @@
                            <div class="scroll">
                               <ul class="pages">
                                  <li class="nav-item">
-                                    <a href="#">
+                                    <a href="./home.php">
                                        <span class="nav-item_icon">
                                           <svg class="icon-base">
                                              <use xlink:href="#icon-sidebar-home">
@@ -100,7 +100,7 @@
                                     </a>
                                  </li>
                                  <li class="nav-item">
-                                    <a href="#">
+                                    <a href="./user_products.php">
                                        <span class="nav-item_icon">
                                           <svg class="icon-base">
                                              <use xlink:href="#icon-sidebar-products">
@@ -150,7 +150,7 @@
                               </ul>
                               <ul class="sources">
                                  <li class="nav-item nav-item-active">
-                                    <a href="#">
+                                    <a href="all_products.php">
                                        <span class="nav-item_icon">
                                           <svg class="icon-base">
                                              <use xlink:href="#icon-sidebar-search">
@@ -361,7 +361,7 @@
                                           for($index = 0; $index < count($watchListData); $index++){
                                  ?>
                                  
-
+                              <form method = "post">
                                  <div class="panel-body import-list">
                                     <div class="tabs">
                                        <div class="tabs-header">
@@ -470,7 +470,7 @@
                                              <div class="product-main-tab">
                                                 <div class="product-main-tab_image-container">
                                                    <div class="product-img">
-                                                      <img class="import-list-main-tab_image" src=""alt="furniture">
+                                                      <img class="import-list-main-tab_image" src="./images/<?php echo $watchListData[$index]['productImage'];?>"alt="furniture">
                                                    </div>
                                                 </div>
                                                 <div class="product-main-tab_description">
@@ -855,7 +855,7 @@
                                                    </div>
                                                    <div class="tox-sidebar-wrap" >
                                                       <div class="tox-edit-area">
-                                                         <iframe id="tiny-vue_18885963821609270016227_ifr" src="editor.html" class="tox-edit-area_iframe" allowtransparency="true" frameborder="0" >
+                                                         <iframe id="tiny-vue_18885963821609270016227_ifr" src="./editor.php?id=<?php echo $watchListData[$index]['productId'] ?>" class="tox-edit-area_iframe" allowtransparency="true" frameborder="0" >
                                                          </iframe>
                                                          <div class="tox-sidebar" role="complementary">
                                                             <div class="tox-sidebar_slider tox-sidebar-sliding-closed" data-alloy-tabstop="true" tabindex="-1" style="width: 0px;">
@@ -1056,14 +1056,14 @@
                                                             </td>
                                                             <td class="variants-table_sticky variants-table_sticky-img">
                                                                <div>
-                                                                  <img class="variants-table_product-image" src="image/sofa-icon.png">
+                                                                  <img class="variants-table_product-image" src="./images/<?php echo $watchListData[$index]['productImage']?>">
                                                                </div>
                                                             </td>
                                                             <td>
-                                                               <input class="form-control" type="text" placeholder="" value ="<?php echo $watchListData[$index]['']; ?>">
+                                                               <input class="form-control" type="text" placeholder="" value ="<?php echo $watchListData[$index]['vendor_id']; ?>">
                                                             </td>
                                                             <td>
-                                                               <input class="form-control" type="text" placeholder="">
+                                                               <input class="form-control" type="text" value=<?php echo $watchListData[$index]['productColor']?>>
                                                             </td>
                                                             <td>
                                                                <input class="form-control" type="text" placeholder="Canada">
@@ -1268,7 +1268,7 @@
                                                         </button>
                                     </div>
                                  </div>
-								 
+                                          </form>
 								 <?php
 										  }
 										}

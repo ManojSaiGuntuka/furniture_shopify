@@ -11,6 +11,14 @@ require_once('../DB.php');
 
         private $CUR_USER_ID ;
 
+        function getProduct($proId){
+
+            $productQuery = "select * from products where productId = '$proId'";
+            $product = $this->getConnection()->query($productQuery);
+            return $product;
+
+        }
+
         function __construct(){
             $this->CUR_USER_ID = $_SESSION['user_id'];
         }
