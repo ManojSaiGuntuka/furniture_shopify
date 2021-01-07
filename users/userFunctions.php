@@ -80,19 +80,25 @@ require_once('../DB.php');
             }
 
         function deleteWatchList($watchListId){
+
             $delete_watchlist_query = "delete from watchlist where watchListId = '$watchListId'";
             $this->getConnection()->query($delete_watchlist_query);
+
         }
 
         function addToShopify($productList_id){
+
             print_r($productList_id);
             header("Location: ../import_products.php?pid=$productList_id");
+
         }
 
-        function addToStore($product_name, $desc, $newPrice, $productImage, $watchListId, $product_id, $stock_inv){
+        function addToStore($product_name, $desc, $productImage, $newPrice, $watchListId, $product_id ){
 
             $user_id = $this->getUserId();
-            $insertQuery = "insert into productlist(user_id, product_id, productName, productPrice,Description,  productImage, Stock) values('$user_id', '$product_id','$product_name', '$newPrice', '$desc','$productImage','$stock_inv')";
+            print_r($productImage);
+            $insertQuery = "insert into productlist(product_id, user_id, productName, productImage, productColor, productPrice, Stock, Description) 
+                        values('$product_id', '$user_id', '$product_name', '$productImage', '$productColor', '$newPrice', '$Stock', '$desc')";
 
 
             $this->getConnection()->query($insertQuery);

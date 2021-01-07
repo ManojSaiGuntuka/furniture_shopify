@@ -10,6 +10,16 @@
 
     $UF = new UserFunctions();
     $UF->deleteFromStore($_POST['remove_from_store']);
+    
+  }
+
+  function counter($store_data){
+    if(count($store_data) < 1){
+      echo '<h2>Currently You Have 0 Products</h2>';
+    }
+      else{
+        ?><h2>You have <?php echo count($store_data)?> Products In Your Store</h2><br/><br/><?php
+      }
   }
 ?>
 
@@ -298,12 +308,7 @@
                             <div class="product-collection-carousel_carousel">
                               <div class="product-collection-carousel_product-cards">
                                 <?php
-                                  if(count($store_data) < 1){
-                                    echo '<h2>Currently You Have 0 Products</h2>';
-                                  }
-                                    else{
-                                      ?><h2>You have <?php echo count($store_data)?> Products In Your Store</h2><br/><br/><?php
-                                    }
+                                  counter($store_data);
                                 ?>
                                 <ul>
                                 <?php 
@@ -317,7 +322,7 @@
                                       <div class="panel expanding-panel product-card">
                                         <div class="panel-header-with-image">
                                           <div class="product-card_anchor">
-                                            <img src="images/<?php echo $product['productImage']?>" alt="" />
+                                            <img src="./images/<?php echo $product['productImage']?>" alt="" />
                                           </div>
                                           <div class="discount-notice">
                                             <span class="old-price"><!--C <?php echo $product['productPrice']?>--></span>

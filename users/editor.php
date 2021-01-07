@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/content.css" />
     <title>Document</title>
   </head>
+  
   <body
     id="tinymce"
     class="mce-content-body"
@@ -25,18 +26,9 @@
     contenteditable="true"
   >
 
-    <p>
-      <strong>Prtoduct Name :</strong>
-      <?php echo $PRODUCTDATA[0]['productName']?>
-      <br />
-      <strong>Item type :</strong>
-      <?php echo $PRODUCTDATA[0]['productName']?>
-      <br />
-      <strong>origin :</strong>
-      Canada<br />
-      <strong>Info :</strong>
-      <?php echo $PRODUCTDATA[0]['Description']?><br />
-    </p>
+    <div id="productDescription" name="new_description">
+      <?php echo $PRODUCTDATA[0]['Description']?>
+    </div>
 
   </body>
 </html>
