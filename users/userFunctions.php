@@ -120,13 +120,38 @@ require_once('../DB.php');
         }
 
         function deleteFromStore($prod_id){
+
             $user_id = $this->getUserId();
             $deleteQuery = "delete from productlist where user_id ='$user_id' and productId='$prod_id'";
             print_r($this->getConnection()->query($deleteQuery));
 
             header("Refresh:0");
+
         }
         
+        function getOrders(){
+
+            $url = "https://43c249091a227bea5ca0733355a3b05d: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@clickrippleappfurniture.myshopify.com/admin/orders.json";
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_VERBOSE, 0);
+            //curl_setopt($curl, CURLOPT_HEADER, 1);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            //curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($product));
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            $response['data'] = curl_exec ($curl);
+            if(curl_errno($curl))
+            {
+                $response['error'] = 'Curl error: ' . curl_error($curl);
+            }
+            curl_close ($curl);		
+            return $response;
+
+        }
+
     }
     
 ?>
