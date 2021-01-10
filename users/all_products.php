@@ -635,8 +635,8 @@ html .ui-button.ui-state-disabled:active {
                                                    }
                                                    $resultVendor = mysqli_query($conn, "SELECT DISTINCT r.retailer_id, r.retailer_name FROM products p, retailer r WHERE p.vendor_id = r.retailer_id && p.productId");
 
-           				                           $select_all_products_query = mysqli_query($conn, $query);
-            			                            while($row1= mysqli_fetch_assoc($select_all_products_query)){
+                                                  $select_all_products_query = mysqli_query($conn, $query);
+                                                  print_r(mysqli_fetch_assoc($select_all_products_query));            			                            while($row1= mysqli_fetch_assoc($select_all_products_query)){
 
       					                            ?>
                         
@@ -649,13 +649,7 @@ html .ui-button.ui-state-disabled:active {
                               <div class="col-md-6">
                                  <div class="left-big">
                                     <h3><?php echo $row1['productName'] ?></h3>
-                                     <?php
-                                        while($row2= mysqli_fetch_array($resultVendor)){
-                                         ?>
-                                        <p>By <span><?php echo $row2['retailer_name'] ?></span></p>
-                                        <?php
-                                        }
-                                         ?>
+                                     
                                     <div class="prod-btn">
                                        <a href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist</a>
                                        <a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>
@@ -730,7 +724,7 @@ html .ui-button.ui-state-disabled:active {
             <div class="container">
                <div class="row">
                   <div class="col-md-8">
-                    <p><img width="90" src="images/clickripple.png" alt="#" style="margin-top: -5px; background-color: white;width: 50%" /> All Rights Reserved. ClickRipple © 2020</p>
+                    <p><img width="90" src="images/clickripple.png" alt="#" style="margin-top: -5px; background-color: white;width: 50%" /> All Rights Reserved. ClickRipple ï¿½ 2020</p>
                   </div>
                   
                </div>

@@ -123,7 +123,7 @@
                               </ul>
                               <ul class="sources">
                                  <li class="nav-item nav-item-active">
-                                    <a href="all_products.php">
+                                    <a href="./user_index.php">
                                        <span class="nav-item_icon">
                                           <svg class="icon-base">
                                              <use xlink:href="#icon-sidebar-search">

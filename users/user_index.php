@@ -1,3 +1,24 @@
+
+<?php
+
+  include("../admin/adminFunctions.php");
+  include("./userFunctions.php");
+
+  $AF = new AdminFunctions();
+  $UF = new UserFunctions();
+
+  $products = $AF->getAllProducts();
+
+  if(isset($_POST['addToImportList'])){
+    
+    $UF->insertIntoWatchList($_POST['addToImportList']);
+
+    header("location: ./importproduct.php");
+
+  }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,7 +50,7 @@
                 <div class="scroll">
                   <ul class="pages">
                     <li class="nav-item">
-                      <a href="#">
+                      <a href="./user_index.php">
                         <span class="nav-item_icon">
                           <svg class="icon-base">
                             <use xlink:href="#icon-sidebar-home">
@@ -48,7 +69,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="#">
+                      <a href="./importproduct.php">
                         <span class="nav-item_icon">
                           <svg class="icon-base">
                             <use xlink:href="#icon-sidebar-import-list">
@@ -64,7 +85,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="#">
+                      <a href="./user_products.php">
                         <span class="nav-item_icon">
                           <svg class="icon-base">
                             <use xlink:href="#icon-sidebar-products">
@@ -80,7 +101,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="#">
+                      <a href="./order.php">
                         <span class="nav-item_icon">
                           <svg class="icon-base">
                             <use xlink:href="#icon-sidebar-orders">
@@ -114,7 +135,7 @@
                   </ul>
                   <ul class="sources">
                     <li class="nav-item nav-item-active">
-                      <a href="#">
+                      <a href="./user_index.php">
                         <span class="nav-item_icon">
                           <svg class="icon-base">
                             <use xlink:href="#icon-sidebar-search">
@@ -440,337 +461,24 @@
                         <div>
                           <!----------------------------------------------------first will start------------------------------------------------->
 
-                          <div class="product-collection-carousel">
-                            <header class="product-collection-carousel_header">
-                              <h3>Product Watch</h3>
-                            </header>
-                            <div class="product-collection-carousel_carousel">
-                              <div class="product-collection-carousel_product-cards">
-                                <ul>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-
                           <!--------------------------------------- next will start----------------------------------------------------------------------------->
 
                           <div class="product-collection-carousel">
                             <header class="product-collection-carousel_header">
                               <h3>Product Watch</h3>
                             </header>
+                
                             <div class="product-collection-carousel_carousel">
                               <div class="product-collection-carousel_product-cards">
                                 <ul>
+                                  
+                                  <?php foreach($products as $product) {?>
                                   <li>
                                     <div class="product-card-wrapper">
                                       <div class="panel expanding-panel product-card">
                                         <div class="panel-header-with-image">
                                           <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
+                                            <img src="./images/<?php echo $product['productImage']?>" alt="sofa" />
                                           </div>
                                           <div class="discount-notice">
                                             <span class="old-price">US $5.87 - $15.65</span>
@@ -783,7 +491,7 @@
                                               <div class="product-card-meta">
                                                 <div class="product-card-title">
                                                   <a class="product-card-link">
-                                                    folding pet dog
+                                                    <?php echo $product['productName']?>
                                                   </a>
                                                 </div>
                                               </div>
@@ -828,247 +536,29 @@
                                                 </div>
                                               </div>
                                             </div>
+
                                             <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
+                                              <form method="post">
+                                                <button type="submit" class="btn btn-primary btn-regular btn-block btn-title" type="button"
+                                                  value=<?php echo $product['productId']?> name="addToImportList">
+                                                  Add To Import List
+                                                </button>
+                                              
                                             </div>
+
+                                            <br/>
+                                            <a
+                                              class="btn btn-primary btn-regular btn-block btn-title" type="button"
+                                              href="./product_detail.php?pid=<?php echo $product['productId']?>">
+                                               View This Product</a>
+                                              </form>
+
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </li>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="product-card-wrapper">
-                                      <div class="panel expanding-panel product-card">
-                                        <div class="panel-header-with-image">
-                                          <div class="product-card_anchor">
-                                            <img src="image/sofa.jpg" alt="sofa" />
-                                          </div>
-                                          <div class="discount-notice">
-                                            <span class="old-price">US $5.87 - $15.65</span>
-                                            <span class="new-discount">30% off</span>
-                                          </div>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div class="" style="max-height: none">
-                                            <div class="product-card_meta">
-                                              <div class="product-card-meta">
-                                                <div class="product-card-title">
-                                                  <a class="product-card-link">
-                                                    folding pet dog
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="product-price-wrapper">
-                                                <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
-                                                </h4>
-                                              </div>
-                                              <span class="product-card-subtitle">
-                                                <div>
-                                                  <div class="product-shipping-info">
-                                                    Choose shipping country
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <div>
-                                                <div class="product-card_reviews">
-                                                  <div>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                    <svg class="icon-star"></svg>
-                                                  </div>
-                                                  <label class="product-card_reviews-count">(112)</label>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name">
-                                                    Imports
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    2756
-                                                  </div>
-                                                </div>
-                                                <div class="product-card_stat">
-                                                  <div class="product-card_stat-name" aria-describedby="tootltip_w">
-                                                    Orders
-                                                  </div>
-                                                  <div class="product-card_stat-value">
-                                                    756
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div class="product-card-actions">
-                                              <button class="btn btn-primary btn-regular btn-block" type="button">
-                                                <span class="btn-icon-wrap">
-                                                  <svg class="icon-base"></svg>
-                                                </span>
-                                                <span class="btn-title">Add to Import List</span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </li>
+                                  <?php } ?>
                                 </ul>
                               </div>
                             </div>

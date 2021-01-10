@@ -21,19 +21,18 @@
   <?php
 				 
         if(isset($_POST['create_groups'])){
-		                    $groupId = $_POST['groupId'];
-							$group_name = $_POST['group_name'];														
-							$commission = $_POST['commission'];
-							$group_category = $_POST['group_category'];							
-							$group_leader = $_POST['group_leader'];
+			$group_name = $_POST['group_name'];														
+			$commission = $_POST['commission'];
+			$group_category = $_POST['group_category'];							
+			$group_leader = $_POST['group_leader'];
 		
-$query = "INSERT INTO groups(group_name, commission, group_category, group_leader ) ";
-$query .= "VALUES('{$group_name}', '{$commission}', '{$group_category}', '{$group_leader}' ) ";
-$create_groups_query = mysqli_query($conn, $query);
+            $query = "INSERT INTO groups(group_name, commission, group_category, group_leader ) ";
+            $query .= "VALUES('{$group_name}', '{$commission}', '{$group_category}', '{$group_leader}' ) ";
+            $create_groups_query = mysqli_query($conn, $query);
 
-if(!$create_groups_query){
-die("Querry Failed" . mysqli_error($conn));
-}
+            if(!$create_groups_query){
+            die("Querry Failed" . mysqli_error($conn));
+            }
 
 echo  "groups Created: " . " " . "<a href='view_all_groups.php'> View all groups </a>";
 

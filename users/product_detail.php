@@ -512,13 +512,7 @@ header .navbar-default .navbar-header {
                   
                   <div class="prod-page-title">
                      <h2><?php echo $row['productName'] ?></h2>
-                     <?php
-                     while($row2= mysqli_fetch_array($resultVendor)){
-                        ?>
-                     <p>By <span><?php echo $row2['retailer_name'] ?></span></p>
-                     <?php
-                  }
-                  ?>
+                     
                   </div>
 
                   
@@ -599,7 +593,7 @@ header .navbar-default .navbar-header {
                                     while($row3= mysqli_fetch_array($query2)){
                                       ?>
                                         
-                                    <H1><?php echo $row4['mat_title']?></H1>
+                                    <H1><?php echo $row3['mat_title']?></H1>
                                     <?php
                                     }
                                     ?>

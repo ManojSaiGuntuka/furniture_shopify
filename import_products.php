@@ -49,7 +49,7 @@ class Shopify {
 		$rows = $this->db->query($query);
 
 		return $rows;
-	}
+		}
 		
 	}
 	/*
@@ -67,13 +67,9 @@ class Shopify {
 	Image Alt Text
 	*/
 
-
-	
-	
 	// Responsible for creating products through shopify api
 	private function createProductsShopify($data) {
 
-		 
     		$product = [];
     		$product['product'] = [
             'title'=> $data['productName'],
@@ -93,41 +89,15 @@ class Shopify {
                    'inventoryManagement' =>'Clickripplefurniture',
                     'inventory_quantity' => $data['Stock'],
                     'sku' =>$data['Stock']
-
-
                 ]
             ],
-            'images'=> [
-                [
-                    'src'=> $data['productImage'].'jpg',
-                ]
-                
-            ]
-
+            'image'=>  [
+				'src' => 'https://cdn.shopify.com/s/files/1/0516/3299/6539/products/product-image-998007610_350x350.jpg?v=1610002790'
+				]
         ];
-
-
-		/*$product = array("product"=>array(
-			"variant_sku" => $data['productId'],		
-			"productCod" => $data['productCode'],
-			"product_type" => $data['cat_title'],
-			"title" => $data['productName'],
-			"product_type"=>$data['cat_title'],
-			"productStatus" => $data['productStatus'],							
-			"productImage" => $data['productImage'],						
-			"shippingDate" => $data['shippingDate'],
-			"body_html" => $data['Description'],
-			"Option1 Name" => $data['productPrice'],
-			"price" => $data['productPrice'],
-			"varinat-inventory-management" => $data ['inventory-management'],
-			"inventory-qty" => $data ['Stock'],
-			"inventory-policy" => $data['inventory-policy'],
-
-
-		));	*/
 		
-		
-		
+		print_r($product);
+
 		$url = $this->storeUrl()."/admin/products.json";
 
 		$curl = curl_init();
@@ -158,33 +128,33 @@ class Shopify {
 		$results['start-time'] = date('h:i:s'); 
 		$products = $this->fetchProducts();	
 		
-		foreach($products as $product){
+		//foreach($products as $product){
 		
 			$data = array();
-			$data['productId'] = $product['productId'];
-			$data['cat_title']= $product['categoryId'];
-			$data['productCode'] = $product['productCode'];
-			$data['productName'] = $product['productName'];
-			$data['productStatus'] = $product['productStatus'];							
-			$data['productImage'] = $product['productImage'];							
-			$data['shippingDate'] = $product['shippingDate'];
-			$data['productColor'] = $product['productColor'];
-			$data['productSize'] = $product['productSize'];
-			$data['productPrice'] = $product['productPrice'];
-			$data['Stock'] = $product['Stock'];
-			$data['Description'] =$product['Description'];
-			$data['inventory_management'] = $product['variant_inventory_tracker'];
-			$data['tracked'] = $product['variant_inventory_policy'];
-			$data['available'] = $product['available'];
+			$data['productId'] = $products[0]['productId'];
+			$data['cat_title']= $products[0]['categoryId'];
+			$data['productCode'] = $products[0]['productCode'];
+			$data['productName'] = $products[0]['productName'];
+			$data['productStatus'] = $products[0]['productStatus'];							
+			$data['productImage'] = $products[0]['productImage'];							
+			$data['shippingDate'] = $products[0]['shippingDate'];
+			$data['productColor'] = $products[0]['productColor'];
+			$data['productSize'] = $products[0]['productSize'];
+			$data['productPrice'] = $products[0]['productPrice'];
+			$data['Stock'] = $products[0]['Stock'];
+			$data['Description'] =$products[0]['Description'];
+			$data['inventory_management'] = $products[0]['variant_inventory_tracker'];
+			$data['tracked'] = $products[0]['variant_inventory_policy'];
+			$data['available'] = $products[0]['available'];
 
 			
-
-			$data['shopify-response'] = $this->createProductsShopify($data);			
+			$this->createProductsShopify($data);
+			//$data['shopify-response'] = $this->createProductsShopify($data);			
 			$results[] = $data;
 			// wait for half second to compensate 2 calls per second shopify bucket limit (40)
-			usleep(500000); 
+			//usleep(500000); 
 		
-		}
+		//}
 		
 		$results['end-time'] = date('h:i:s');
 		
@@ -199,7 +169,7 @@ class Shopify {
 // Launching migration process now
 $Shopify = new Shopify();
 $results = $Shopify->processProductsMigration();
-header("Location: ./users/user_products.php");
+//header("Location: ./users/user_products.php");
 //echo "<pre>"; print_r($results);
 
 ?>

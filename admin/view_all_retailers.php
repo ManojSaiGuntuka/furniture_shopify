@@ -1,6 +1,5 @@
-<?php include "../inc/connect.php"; ?>
+<?php include "../inc/connect.php"; include "./adminFunctions.php";?>
 
-<?php session_start(); ?>
 <?php  include "includes/admin_header.php" ?>
     <div id="wrapper">
 
@@ -11,7 +10,19 @@
 <div id="page-wrapper">
           
             <div class="container-fluid">
+			<?php
 			
+				$AF = new AdminFunctions();
+				
+				$retailers = $AF->getAllRetailers();
+
+				if(isset($_GET['delete'])){
+
+					$AF->deleteRetailer($_GET['delete']);
+
+				}
+
+			?>
                 <div class="row">
 				<div class="col-lg-12">
                         <h1 class="page-header">
@@ -41,13 +52,11 @@
                    <tbody> 
 				  <?php
 
-				   $query = "SELECT * FROM retailer";
-				   $select_retailer = mysqli_query($conn, $query);
-					while($row = mysqli_fetch_assoc($select_retailer)) {
-							$retailer_id = $row['retailer_id'];
-							$retailer_address = $row['retailer_address'];														
-							$retailer_name = $row['retailer_name'];
-							$retailer_group = $row['retailer_group'];		
+					foreach ($retailers as $retailer) {
+							$retailer_id = $retailer['user_id'];
+							$retailer_address = $retailer['user_address'];														
+							$retailer_name = $retailer['username'];
+							$retailer_group = $retailer['user_group_id'];		
 								
 							
 							echo "<tr>";
@@ -61,23 +70,8 @@
 							echo "<td><a href='edit_retailers.php?retailer_id={$retailer_id}'> Edit </a></td>";
 							echo "<td><a onClick = \"javascript: return confirm('Are you sure you want to delete'); \" href='view_all_retailers.php?delete={$retailer_id}'> Delete </a></td>";
 							echo "</tr>";
-
-										
-
 					}
 				  ?>
-				   		
-				<?php
-				   if(isset($_GET['delete'])){
-
-				   $get_retailer_id = $_GET['delete'];
-
-				   $query = "DELETE FROM retailer WHERE retailer_id ={$get_retailer_id} ";
-				   $delete_query = mysqli_query($conn, $query);
-				   header("Location: view_all_retailers.php");
-				   }
-				   
-				   ?>
 				  		
 
 				   </tbody>	

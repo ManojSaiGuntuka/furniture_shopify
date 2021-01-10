@@ -79,7 +79,6 @@
 
 				   $query = "DELETE FROM groups WHERE groupId ={$get_group_id} ";
 				   $delete_query = mysqli_query($conn, $query);
-				   header("Location: view_all_groups.php");
 				   }
 				   
 				   ?>

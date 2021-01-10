@@ -52,3 +52,5 @@
 {"message":"connection failed in Init","time":"2020-12-25 09:15:40","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
 {"message":"connection failed in Init","time":"2020-12-25 09:21:33","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
 {"message":"connection failed in Init","time":"2020-12-25 09:22:06","ip":"::1","session":{"username":"manojuser","user_id":"1"}}
+{"message":"connection failed in Init","time":"2021-01-10 10:42:52","ip":"::1","session":{"adminId":"2","adminName":"manoj","username":"ankit","user_id":"2"}}
+{"message":"connection failed in Init","time":"2021-01-10 10:43:33","ip":"::1","session":{"adminId":"2","adminName":"manoj","username":"ankit","user_id":"2"}}

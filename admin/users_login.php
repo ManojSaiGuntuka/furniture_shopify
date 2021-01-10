@@ -33,7 +33,8 @@
  
  }
  if($adminName === $db_username && $password === $db_user_password){
-  $_SESSION['adminName'] = $db_username;
+    $_SESSION['adminId'] = $db_id;
+    $_SESSION['adminName'] = $db_username;
 
 	 
  header("Location: view_all_products.php");
@@ -67,7 +68,6 @@
                         </h1> 
                
                     <form role="form" action="" method="post" id="login-form" autocomplete="off">
-                        <h5 class= "text-center"> <?php echo $message; ?></h5>
 						<div class="form-group">
                             <label for="adminName" class="sr-only">username</label>
                             <input type="text" name="adminName" id="adminName" class="form-control" placeholder="Enter Desired Username">
