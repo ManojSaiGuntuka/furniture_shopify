@@ -10,8 +10,10 @@
  $user_lastname = $_POST['user_lastname'];
  $user_email    = $_POST['user_email'];
  $user_password = $_POST['user_password'];
+ $user_address =$_POST['user_address'];
+ $user_group_id =$_POST['user_group_id'];
 
- if(!empty($username) && !empty($user_firstname) && !empty($user_lastname) && !empty($user_email) && !empty($user_password)) {
+ if(!empty($username) && !empty($user_firstname) && !empty($user_lastname) && !empty($user_email) && !empty($user_password) ) {
 
  
  $username = mysqli_real_escape_string($conn, $username);
@@ -19,10 +21,12 @@
  $user_lastname = mysqli_real_escape_string($conn, $user_lastname);
  $user_email   =  mysqli_real_escape_string($conn, $user_email);
  $user_password = mysqli_real_escape_string($conn, $user_password);
+ $user_address =mysqli_real_escape_string($conn, $user_address);
+ $user_group_id=mysqli_real_escape_string($conn,$user_group_id);
 
 
- $query = "INSERT INTO users(username, user_password,user_firstname,user_lastname,user_email,user_image,user_role,randSalt) ";
- $query .= "VALUES('{$username}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}','', '', '' ) ";
+ $query = "INSERT INTO retailers(username, user_password,user_firstname,user_lastname,user_email,user_address,user_group_id) ";
+ $query .= "VALUES('{$username}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}','{$user_address}','{$user_group_id}') ";
  $register_user_query = mysqli_query($conn, $query);
 
  if(!$register_user_query){
@@ -63,11 +67,11 @@
                             <input type="text" name="username" id="username" class="form-control" placeholder="Enter Desired Username">
                         </div>
                          <div class="form-group">
-                            <label for="user_firstname" class="sr-only">Email</label>
+                            <label for="user_firstname" class="sr-only">FirstName</label>
                             <input type="text" name="user_firstname" id="user_firstname" class="form-control" placeholder="FirstName">
                         </div>
                         <div class="form-group">
-                            <label for="user_lastname" class="sr-only">Email</label>
+                            <label for="user_lastname" class="sr-only">LastName</label>
                             <input type="text" name="user_lastname" id="user_lastname" class="form-control" placeholder="LastName">
                         </div>
                          <div class="form-group">
@@ -78,6 +82,16 @@
                             <label for="user_password" class="sr-only">Password</label>
                             <input type="password" name="user_password" id="key" class="form-control" placeholder="Password">
                         </div>
+						<div class="form-group">
+                            <label for="user_address"  class="sr-only">Address</label>
+                        
+							 <textarea placeholder="Address" name="user_address" id="user_address" class="form-control"></textarea> 
+                        </div>
+						<div class="form-group"hidden>
+                            <label for="user_group_id" class="sr-only">Email</label>
+                            <input type="text" name="user_group_id" id="user_group_id" class="form-control" placeholder="groupId" value="1">
+                        </div>
+						
                 
                         <input type="submit" name="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="Register">
                     </form>

@@ -10,7 +10,7 @@ if(isset($_POST['login'])){
     $username = mysqli_real_escape_string($conn ,$username);
     $user_password = mysqli_real_escape_string($conn ,$user_password);
 
-    $query = "SELECT * FROM users WHERE username = '{$username}'";
+    $query = "SELECT * FROM retailers WHERE username = '{$username}'";
     $select_user_query = mysqli_query($conn, $query);
   if(!$select_user_query){
  
@@ -34,7 +34,7 @@ if(isset($_POST['login'])){
 
         }
     else {
-        header("Location: login.php");
+        header("Location: users_login.php");
       }
 
 
