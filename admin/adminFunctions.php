@@ -6,7 +6,7 @@
     if(session_status() == 1){
         session_start();
     }
-
+    
     class AdminFunctions{
 
         function __construct(){

@@ -152,6 +152,18 @@ require_once('../DB.php');
 
         }
 
+        function getMargin(){
+
+            $userId = $this->getUserId();
+            $getCurUserGroupQuery = "select user_group_id from retailers where user_id = $userId";
+            $getCurUserGroup = $this->getConnection()->query($getCurUserGroupQuery)[0]['user_group_id'];
+            $getCurGroupMarginQuery = "select commission from groups where group_category = '$getCurUserGroup'";
+            $getCurGroupMargin = $this->getConnection()->query($getCurGroupMarginQuery)[0]['commission'];
+
+            return $getCurGroupMargin;
+
+        }
+
     }
     
 ?>

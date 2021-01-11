@@ -9,11 +9,16 @@ if (!empty($_GET)) {
         
         $resultVendor = mysqli_query($conn, "SELECT DISTINCT r.retailer_id, r.retailer_name FROM products p, retailer r WHERE p.vendor_id = r.retailer_id && p.productId= $pid");
         $query2 =  mysqli_query($conn,"SELECT DISTINCT m.mat_id, m.mat_title FROM products p, material m WHERE p.mat_id = m.mat_id && p.productId= $pid");
+
     } else {
         header("location: home.php");
         exit;
     }
-    
+
+    $UF = new UserFunctions();
+
+    $curProPrice = $UF->productDeatails($_GET['pid'])[0]['productPrice'];
+
    if(isset($_POST['onImport'])){
       $UF = new UserFunctions();
       
@@ -656,7 +661,13 @@ header .navbar-default .navbar-header {
                <div class="col-md-3 col-sm-12">
                   <div class="price-box-right">
                      <h4>Price</h4>
-                     <h3><?php echo $row['productPrice'] ?><span> &nbsp;pr.peice</span></h3>
+                     <h3><?php 
+                     
+                        $priceMargin = $UF->getMargin();
+                        $priceToAdd = $curProPrice*((int)$priceMargin / 100);
+                        echo $curProPrice+$priceToAdd;
+
+                     ?><span> &nbsp;pr.peice</span></h3>
                      <p>Option</p>
                      <select class="form-control select2">
                         <option>Shipping</option>

@@ -30,7 +30,7 @@ if(isset($_POST['login'])){
       $_SESSION['username'] = $db_username;
       $_SESSION['user_id'] = $db_id;
         
-      header("Location: ./users/home.php");
+      header("Location: ./users/user_index.php");
 
         }
     else {

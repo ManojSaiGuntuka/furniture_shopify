@@ -1,13 +1,12 @@
 
 <?php
 
-  include("../admin/adminFunctions.php");
   include("./userFunctions.php");
 
-  $AF = new AdminFunctions();
   $UF = new UserFunctions();
 
-  $products = $AF->getAllProducts();
+  $getAllProductsQuery = "select * from products";
+  $products = $UF->getConnection()->query($getAllProductsQuery);
 
   if(isset($_POST['addToImportList'])){
     
