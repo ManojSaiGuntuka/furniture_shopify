@@ -3,7 +3,7 @@
    include "./userFunctions.php";
    
    $UF = new UserFunctions();
-   $shipping_charge =0;
+   $shipping_charge =50;
    $watchListData = $UF->getWatchListProducts();
    
     if(isset($_POST['import_to_store'])){
@@ -52,6 +52,9 @@
       <script src="js/jquery.min.js"></script>
       <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
       <script>tinymce.init({selector:'textarea', height : "480"});</script>
+
+      
+
       <title>Import List</title>
    </head>
 
@@ -761,14 +764,18 @@
                                                             <td>
                                                                <div class="money-view">
                                                                   <div class="money-view_field money-view_field-original">
-                                                                     <span>C$ <?php echo $watchListData[$index]['productPrice']; ?></span>
+                                                                  C$ <span id = "price"><?php 
+                                                                                 $priceMargin = $UF->getMargin();
+                                                                                 $priceToAdd = $watchListData[$index]['productPrice']*((int)$priceMargin / 100);
+                                                                                 echo $watchListData[$index]['productPrice']+$priceToAdd;
+                                                                                 ?></span>
                                                                   </div>
                                                                </div>
                                                             </td>
                                                             <td>
                                                                <div class="money-view">
                                                                   <div class="money-view_field money-view_field-original">
-                                                                     <span> C$ 50.20</span>
+                                                                  C$ <span id="shippingCost"> 50.20</span>
                                                                   </div>
                                                                </div>
                                                             </td>
@@ -778,8 +785,14 @@
                                                                      <div class="input-block">
                                                                         <div class="input-field">
                                                                            <div class="form-control input-with-symbol">
-                                                                              <span class="input-symbol">US$ </span>
-                                                                              <input class="form-control" type="text" name="newPrice" value="<?php echo $watchListData[$index]['productPrice'] + $shipping_charge; ?>">
+                                                                              <span class="input-symbol " >US$ </span>
+                                                                              <input class="form-control" id="newPrice" type="text" name="newPrice"  value="<?php 
+
+                                                                                 $priceMargin = $UF->getMargin();
+                                                                                 $priceToAdd = $watchListData[$index]['productPrice']*((int)$priceMargin / 100);
+                                                                                 echo $watchListData[$index]['productPrice']+$priceToAdd + $shipping_charge; 
+
+                                                                                 ?>">
                                                                            </div>
                                                                         </div>
                                                                      </div>
@@ -790,7 +803,7 @@
                                                                <span class="variants-table_column-negative">
                                                                   <div class="money-view">
                                                                      <div class="money-view_field money-view_field-original">
-                                                                        <span></span>
+                                                                        <span id="profit"></span>
                                                                      </div>
                                                                   </div>
                                                                </span>
@@ -1004,9 +1017,20 @@
       </script>
       <script>
          $(document).ready(function(){
-           $(".dropdown_toggle").dropdown(toggle);
+            console.log(document.getElementById("price").innerHTML)
+           $('#newPrice').on('input', function() {
+            let shipping = document.getElementById("shippingCost").innerHTML
+            let Price = document.getElementById("price").innerHTML
+            console.log(shipping ,parseInt(Price), document.getElementById("profit").innerHTML)
+            document.getElementById("profit").innerHTML = document.getElementById("newPrice").value- (shipping + parseInt(Price))
+            
+           })
+
          });
-      </script>
+         
+         
+
+</script>
    </body>
 </html>
 

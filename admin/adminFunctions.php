@@ -69,5 +69,22 @@
 
         }
 
+        function updateCategory($catId, $catTitle, $cat_tags, $productImage, $product_image_temp){
+
+            move_uploaded_file($product_image_temp, "../images/$productImage");
+            $updateQuery = "update category set cat_title = '$catTitle', cat_tags='$cat_tags', cat_image ='$productImage' where cat_id = '$catId'";
+            $this->getConnection()->query($updateQuery);
+            header("Location: view_all_categories.php");
+
+        }
+
+        function getCategory($catId){
+
+            $getCatQuery = "select * from category where cat_id = '$catId'";
+            $getCat = $this->getConnection()->query($getCatQuery);
+            return $getCat[0];
+
+        }
+
     }
 ?>

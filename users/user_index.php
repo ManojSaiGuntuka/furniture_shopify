@@ -16,6 +16,11 @@
 
   }
 
+  if (isset($_POST['logout'])){
+    session_destroy();
+    header("Location: http://ankits-macbook-air.local/furniture/"); 
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -172,6 +177,9 @@
                         </svg>
                       </span>
                       <span class="nav-item_title">Settings</span>
+                      <form method="post">
+                        <input type=submit class="nav-item_title" name="logout" value="Logout"/>
+                      </form>
                     </a>
                   </li>
                   <li class="nav-item">

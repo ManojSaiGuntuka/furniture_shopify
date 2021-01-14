@@ -538,7 +538,7 @@ header .navbar-default .navbar-header {
                      <a href="#"></a>
                   </div>
                </div>
-               <div class="col-md-7 col-sm-8">
+               <div class="col-md-7 colbv-sm-8">
                   <div class="md-prod-page">
                      <div class="md-prod-page-in">
                         <div class="page-preview">

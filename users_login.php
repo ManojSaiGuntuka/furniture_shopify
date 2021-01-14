@@ -10,7 +10,7 @@ if(isset($_POST['login'])){
     $username = mysqli_real_escape_string($conn ,$username);
     $user_password = mysqli_real_escape_string($conn ,$user_password);
 
-    $query = "SELECT * FROM retailers WHERE username = '{$username}'";
+    $query = "select * from retailers where username = '$username' and user_password = '$user_password'";
     $select_user_query = mysqli_query($conn, $query);
   if(!$select_user_query){
  
@@ -23,7 +23,7 @@ if(isset($_POST['login'])){
   $db_username = $row['username'];
   $db_user_password = $row['user_password']; 
 
- //$password = crypt($password, $db_user_password);
+ $password = crypt($password, $db_user_password);
 
  if($username === $db_username && $user_password === $db_user_password){
  

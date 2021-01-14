@@ -29,7 +29,6 @@ $query = "SELECT * FROM products WHERE productId = $get_products_id ";
  while($row = mysqli_fetch_assoc($select_product_id)) {
  $productId= $row['productId'];
 $productName = $row['productName'];
-$categoryId = $row['categoryId'];
 $productCode = $row['productCode'];
 $productColor = $row['productColor'];
 $productSize = $row['productSize'];
@@ -46,7 +45,7 @@ if(isset($_POST['update_product'])) {
 
 //$productId = $_POST['productId'];
 $productName = $_POST['productName'];
-$categoryId = $_POST['categoryId'];
+$categoryId = $_POST['cat_title'];
 $productCode = $_POST['productCode'];
 //$productName = $_POST['productName'];
 $productColor = $_POST['productColor'];
@@ -56,14 +55,7 @@ $productStatus = $_POST['productStatus'];
 $productImage = $_FILES['productImage']['name'];
 $product_image_temp = $_FILES['productImage']['tmp_name'];
 $Stock = $_POST['Stock'];
-$Description = $_POST['Description'];
-$cat_title = $_POST['cat_title'];
-
-//$productColor = $_POST['productColor'];
-//$productSize = $_POST['productSize'];
-//$productPrice = $_POST['productPrice'];
-
-
+$Description = $_POST['new_description'];
 
 move_uploaded_file($product_image_temp, "../images/$productImage" );
 
@@ -82,14 +74,12 @@ $query .="productCode = '{$productCode}', ";
 $query .="productName = '{$productName}', ";
 $query .="productStatus = '{$productStatus}', ";
 $query .="productImage= '{$productImage}', ";
-//$query .="cat_date = now(), ";
 $query .="productColor = '{$productColor}', ";
 $query .="productSize = '{$productSize}', ";
 $query .="productPrice = '{$productPrice}', ";
 $query .="Stock = '{$Stock}',";
-$query .="Description = '{$Description}',";
-$query .="cat_title = '{$cat_title}'";
-
+$query .="Description = '{$Description}'";
+//$query .="cat_title = '{$cat_title}'";
 
 $query .= "WHERE productId = {$get_products_id} ";
 
@@ -102,7 +92,8 @@ echo "<p> Product Updated. <a href='view_all_products.php?products_id={$get_prod
 
 }
 ?>
-						
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+      <script>tinymce.init({selector:'textarea', height : "480"});</script>				
 <form action="" method="post" enctype="multipart/form-data">
 
 <div class= "form-group">
@@ -111,7 +102,7 @@ echo "<p> Product Updated. <a href='view_all_products.php?products_id={$get_prod
 </div>
 
 <div class= "form-group">
-<select name="categoryId" for ="cat_title" id="">
+<select name="cat_title" for ="cat_title" id="">
 
 <?php 
 $query = "SELECT * FROM category";
@@ -166,12 +157,12 @@ $cat_title = $row['cat_title'];
 
 <div class= "form-group">
 <label for= "Description">Description </label>
-<textarea name="Description"> <?php echo $Description; ?></textarea>
+<textarea name="new_description"><?echo $Description?></textarea>
 </div>
 
 <div class= "form-group">
 <label for= "productImage"> Product Image </label>
-<input  type="file" name="productImage">
+<input  type="file" name="productImage" value=<?php echo $productImage?>> Current Image :<?php echo $productImage?>
 </div>
 
 

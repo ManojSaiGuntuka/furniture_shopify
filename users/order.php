@@ -5,6 +5,8 @@
    $UF = new UserFunctions();
 
    $OrderData = $UF->getOrders()['data'];// The Store Data
+
+   print_r($OrderData);
 ?>
 
 <!DOCTYPE html>
