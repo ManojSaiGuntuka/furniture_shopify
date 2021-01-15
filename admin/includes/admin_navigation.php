@@ -1,4 +1,15 @@
 
+<?php
+
+    if(isset($_POST['logout'])){
+
+        session_destroy();
+        header("Location: ../index.php");
+
+    }
+
+?>
+
 <body>
  
     <div id="wrapper">
@@ -21,10 +32,16 @@
 				<li> <a href= "../index.php"> Home </a> </li>
                 			
 	               <li>
-                    <a href= "../index.php"> <i class="fa fa-user"></i> Logout </a>
-                    
+
+                    <?php if(isset($_SESSION['adminId'])) {?>
+                    <form method="post">
+                        <i class="fa fa-user"><input type="submit" name="logout" value="Logout" class="fa fa-user"/></i>
+                    </form>
+                    <?php } ?>
+
                 </li>
             </ul>
+            <?php if(isset($_SESSION['adminId'])) {?>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
@@ -51,6 +68,7 @@
                     </li>					
                 </ul>
             </div>
+            <?php } ?>
 			</nav>
 			</div>
 

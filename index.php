@@ -57,14 +57,13 @@
 				<br>
 				Product Status: &nbsp;&nbsp; <?php echo $productStatus; ?></a>
 				Product Code: &nbsp;&nbsp;<?php echo $productCode; ?></br>
-                 Color: <?php echo $productColor ?>  </br>
+                Color: <?php echo $productColor ?>  </br>
 				Size of product: &nbsp;&nbsp; <?php echo $productSize ?> </br>
-				Price of products: &nbsp;&nbsp; $<?php echo $productPrice ?>
 				
 				</div>
                 <hr>
 				
-                <img class="img-responsive" src="images/<?php echo $productImage; ?>" alt="" height= "50" width= "400">
+                <img class="img-responsive" src="./users/images/<?php echo $productImage; ?>" alt="" height= "50" width= "400">
 				
                 <hr>
 				
@@ -76,7 +75,7 @@
           
 			</div>
 			</div>
-			<!-- Blog Sidebar Widgets Column -->
+
      <?php 
 	
 	require_once("search.php");

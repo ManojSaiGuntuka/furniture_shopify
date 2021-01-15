@@ -10,7 +10,10 @@
     class AdminFunctions{
 
         function __construct(){
-            $this->CUR_USER_ID = $_SESSION['adminId'];
+            if (isset($_SESSION['adminId'])){
+                $this->CUR_USER_ID = $_SESSION['adminId'];
+            }
+
         }
         
         function getAdminId(){
@@ -43,6 +46,59 @@
             $getGroupsQuery = "select * from groups";
             $getGroups = $this->getConnection()->query($getGroupsQuery);
             return $getGroups;
+
+        }
+
+        function isUserNameExist($userName){
+
+            $userNameQuery = "select * from admin where adminName = '$userName'";
+            $userData = $this->getConnection()->query($userNameQuery);
+            return sizeOf($userData);
+
+        }
+
+        function isEmailExist($email){
+
+            $userNameQuery = "select * from admin where email = '$email'";
+            $userData = $this->getConnection()->query($userNameQuery);
+            return $userData;
+
+        }
+
+        function insertAdmin($adminName, $email, $password){
+
+            $options = [
+                'cost' => 12,
+            ];
+            $password = password_hash($password, PASSWORD_BCRYPT, $options);
+
+            $insertAdminQuery = "insert into admin(adminName, password, email) values('$adminName', '$password', '$email')";
+            $insertAdmin = $this->getConnection()->query($insertAdminQuery);
+            return $insertAdmin;
+
+        }
+
+        function loginAdmin($email, $password){
+
+            if($this->isEmailExist($email)){
+                
+                $hashPassword = $this->isEmailExist($email)[0]['password'];
+
+                if(password_verify($password, $hashPassword)){
+
+                    $userDetailQuery = "select * from admin where email = '$email'";
+                    $userDetail = $this->getConnection()->query($userDetailQuery);
+                    
+                    $_SESSION['adminId'] = $userDetail[0]['adminId'];
+                    $_SESSION['adminName'] = $userDetail[0]['adminName'];
+
+                    header("Location: view_all_products.php");
+
+                }
+
+            }else{
+                return false;
+            }
 
         }
 

@@ -1,7 +1,9 @@
-<?php  include "../inc/connect.php"; ?>
+<?php  include "../inc/connect.php"; include "./adminFunctions.php";?>
 
  <?php 
  
+    $AF = new AdminFunctions();
+
  if(isset($_POST['submit'])){
 
  $adminName = $_POST['adminName'];
@@ -9,40 +11,31 @@
  $password = $_POST['password'];
 
  if(!empty($adminName) && !empty($email) && !empty($password)) {
-
  
- $adminName = mysqli_real_escape_string($conn, $adminName);
- $email   =  mysqli_real_escape_string($conn, $email);
- $password = mysqli_real_escape_string($conn, $password);
+    if ($AF->isUserNameExist($adminName) === 0 && $AF->isUserNameExist($adminName) === 0){
 
+        if(sizeOf($AF->insertAdmin($adminName, $email, $password)) === 1){
 
- $query = "SELECT randPass FROM admin";
- $select_randPass_query = mysqli_query($conn, $query);
+            ?>
+                <script>
+                    alert("You are registered")
 
- if(!$select_randPass_query){
-   die("Query Failed" . mysqli_error($conn));
- }
+                </script>
+            <?php
+            header("Location: index.php");
+        }
 
- $row = mysqli_fetch_array($select_randPass_query);
- $pass = $row['randPass'];
- //$password = crypt($password, $pass);
- 
- $query = "INSERT INTO admin(adminName, password, email) ";
- $query .= "VALUES('{$adminName}', '{$password}', '{$email}' ) ";
- $register_user_query = mysqli_query($conn, $query);
+    }else{
+        ?>
+            <script>
+                alert("Username/Email already exist")
+                location.reload()
+            </script>
+        <?php
+    }
 
- if(!$register_user_query){
-   die("Query Failed" . mysqli_error($conn) . ' ' . mysqli_error($conn));
- }
-
-  $message = "Your Registration has been submitted!!!";
-
- }else {
- 	 $message = "Fields should not be empty!!";
  }
  
- }else{
- $message ="";
  }
  ?>
  
@@ -67,7 +60,7 @@
                         </h1> 
                
                     <form role="form" action="users_register.php" method="post" id="login-form" autocomplete="off">
-                        <h5 class= "text-center"> <?php echo $message; ?></h5>
+
 						<div class="form-group">
                             <label for="adminName" class="sr-only">username</label>
                             <input type="text" name="adminName" id="adminName" class="form-control" placeholder="Enter Desired Username">

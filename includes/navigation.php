@@ -51,10 +51,8 @@ li a:hover {
 				
 	?>
 
-  <li><a href="login.php">Admin Login</a></li>
-  <li><a <a href="registration.php">Registration</a></li>
   <li><a href="users_login.php">User Login</a></li>
-  <li><a <a href="users_registration.php">User Registration</a></li>
+  <li><a href="users_registration.php">User Registration</a></li>
  
 </ul>
 

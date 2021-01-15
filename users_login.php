@@ -34,8 +34,12 @@ if(isset($_POST['login'])){
 
         }
     else {
-        header("Location: users_login.php");
-      }
+        ?>
+        <script>
+            alert("Credentials are not correct")
+            location.reload()
+        </script>
+      <?php }
 
 
 }
@@ -58,12 +62,12 @@ if(isset($_POST['login'])){
   <form method="post" action="users_login.php">  
   <p>
     <label>Username: </label>
-	<input type="text" id="username" name = "username"/>
+	<input required type="text" id="username" name = "username"/>
 	</p> 
     
 	<p>
     <label>Password:  </label> 
-	<input type="password" id="user_password" name = "user_password"/>
+	<input required type="password" id="user_password" name = "user_password"/>
 	</p> 
   
   <br><br>
