@@ -1,7 +1,17 @@
 <?php include "../inc/connect.php"; ?>
 
 <?php session_start(); ?>
-<?php  include "includes/admin_header.php" ?>
+<?php
+
+   if(!(isset($_SESSION['adminId']))){
+
+      header("Location: index.php");
+
+   }
+
+?>
+<?php  include "includes/admin_header.php"; include "./adminFunctions.php"; ?>
+<?php $AF = new AdminFunctions();?>
     <div id="wrapper">
 
        <?php  include "includes/admin_navigation.php" ?>
@@ -23,21 +33,35 @@
         if(isset($_POST['create_groups'])){
 			$group_name = $_POST['group_name'];														
 			$commission = $_POST['commission'];
-			$group_category = $_POST['group_category'];							
-			$group_leader = $_POST['group_leader'];
-		
-            $query = "INSERT INTO groups(group_name, commission, group_category, group_leader ) ";
-            $query .= "VALUES('{$group_name}', '{$commission}', '{$group_category}', '{$group_leader}' ) ";
-            $create_groups_query = mysqli_query($conn, $query);
+            $group_category = $_POST['group_category'];	
+            
+            $conditionForGroup = (sizeof($AF->isGroup($group_category)) === 0 && sizeOf($AF->isGroupCommission($commission)) === 0);
+            
+            if($conditionForGroup){
 
-            if(!$create_groups_query){
-            die("Querry Failed" . mysqli_error($conn));
+                $query = "INSERT INTO groups(group_name, commission, group_category) ";
+                $query .= "VALUES('{$group_name}', '{$commission}', '{$group_category}') ";
+                $create_groups_query = mysqli_query($conn, $query);
+                header("Location: view_all_groups.php");
+
+            }else{
+
+                ?>
+                
+                <script>
+                
+                    window.alert("Commission or Group Category Already Exist")
+
+                </script>
+
+                <?php
             }
 
-echo  "groups Created: " . " " . "<a href='view_all_groups.php'> View all groups </a>";
+        }
+
+echo  "<a href='view_all_groups.php'> View all groups </a>";
 
 
-}
 ?>
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -54,10 +78,7 @@ echo  "groups Created: " . " " . "<a href='view_all_groups.php'> View all groups
 <label for= "group_category"> Group category </label>
 <input  type="text" class= "form-control" name="group_category">
 </div>
-<div class= "form-group">
-<label for= "group_leader"> Group leader name </label>
-<input  type="text" class= "form-control" name="group_leader">
-</div>
+
 <div class= "form-group">
 <input type="submit" class= "btn btn-primary" name="create_groups" value="Add groups">
 </div>

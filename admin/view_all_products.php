@@ -1,5 +1,13 @@
-<?php include "../inc/connect.php"; ?>
-<?php session_start(); ?>
+<?php include "../inc/connect.php";include "./adminFunctions.php"; ?>
+<?php
+
+   if(!(isset($_SESSION['adminId']))){
+
+      header("Location: index.php");
+
+   }
+
+?>
 <?php  include "includes/admin_header.php" ?>
 <div id="wrapper">
 <?php  include "includes/admin_navigation.php" ?>
@@ -13,7 +21,7 @@
    View All Products					   
    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
    <a href="add_product.php"> <input type="button" class= "btn btn-primary"   value="Add Products"> </a>
-   <a href="../import_products.php"> <input type="button" class= "btn btn-primary"   value="ImportProducts"> </a>
+
 </h1>
 <table class="table table-bordered table-hover">
    <thead>
@@ -30,8 +38,7 @@
          <th>Shipping Date</th>
          <th>Stock</th>
          <th>Description</th>
-         <th>category_title
-         <th>
+
          <th>Edit</th>
          <th>Delete</th>
       </tr>
@@ -80,9 +87,6 @@
          echo "<td>$shippingDate</td>";
          echo "<td>$stock</td>";	
          echo "<td>$Description</td>";
-         echo "<td>$cat_title</td>";
-         
-         
          
          echo "<td><a href='edit_products.php?products_id={$productId}'> Edit </a></td>";
          echo "<td><a onClick = \"javascript: return confirm('Are you sure you want to delete'); \" href='view_all_products.php?delete={$productId}'> Delete </a></td>";

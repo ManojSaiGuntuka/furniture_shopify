@@ -144,7 +144,7 @@
                   </ul>
                   <ul class="sources">
                     <li class="nav-item nav-item-active">
-                      <a href="all_products.php">
+                      <a href="user_index.php">
                         <span class="nav-item_icon">
                           <svg class="icon-base">
                             <use xlink:href="#icon-sidebar-search">
@@ -341,7 +341,8 @@
                                               </div>
                                               <div class="product-price-wrapper">
                                                 <h4>
-                                                  <span class="product-card-price">C$ <?php echo $product['productPrice']?></span>
+                                                  <span class="product-card-price">C$ <?php echo $product['productPrice']?></span><br>
+                                                  Profit : <span class="product-card-price">C$ <?php echo $product['profit']?></span>
                                                 </h4>
                                               </div>
                                               <span class="product-card-subtitle">

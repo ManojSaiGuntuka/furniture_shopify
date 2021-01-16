@@ -13,7 +13,6 @@
         ?>
             <script>
                 alert("Invalid email/password")
-                location.reload()
             </script>
         <?php
     }
@@ -67,4 +66,4 @@
                 </div>
             </div> <!-- /.col-xs-12 -->
         </div> <!-- /.row -->
-    </div> <!-- /.container -->
+    </div> 

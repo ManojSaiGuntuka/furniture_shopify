@@ -1,6 +1,16 @@
 <?php include "../inc/connect.php"; ?>
 
 <?php session_start(); ?>
+
+<?php
+
+   if(!(isset($_SESSION['adminId']))){
+
+      header("Location: index.php");
+
+   }
+
+?>
 <?php  include "includes/admin_header.php" ?>
     <div id="wrapper">
 
@@ -33,7 +43,6 @@
 						<th>Group Name</th>						
 						<th>Mark Up</th>
 						<th>Group Category Name</th>						
-						<th>Group Leader</th>
 						<th>Edit</th>
 						<th>Delete</th>
 						
@@ -51,7 +60,6 @@
 							$group_name = $row['group_name'];														
 							$commission = $row['commission'];
 							$group_category = $row['group_category'];							
-							$group_leader = $row['group_leader'];
 							
 							
 							
@@ -60,8 +68,7 @@
 							echo "<td>$groupId </td>";
 							echo "<td>$group_name </td>";							
 							echo "<td>$commission</td>";							
-							echo "<td>$group_category</td>";							
-							echo "<td>$group_leader</td>";	
+							echo "<td>$group_category</td>";								
 							
 							echo "<td><a href='edit_groups.php?group_id={$groupId}'> Edit </a></td>";
 							echo "<td><a onClick = \"javascript: return confirm('Are you sure you want to delete'); \" href='view_all_groups.php?delete={$groupId}'> Delete </a></td>";

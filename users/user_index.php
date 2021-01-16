@@ -504,7 +504,10 @@
                                               </div>
                                               <div class="product-price-wrapper">
                                                 <h4>
-                                                  <span class="product-card-price">US $4 - $11</span>
+                                                  <span class="product-card-price"><?php 
+                                                  $priceMargin = $UF->getMargin();
+                                                  $priceToAdd = $product['productPrice']*((int)$priceMargin / 100);
+                                                  echo $product['productPrice']+$priceToAdd;?></span>
                                                 </h4>
                                               </div>
                                               <span class="product-card-subtitle">

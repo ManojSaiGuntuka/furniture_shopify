@@ -6,18 +6,6 @@ require_once('DB.php');
 
  require_once("./inc/connect.php");
 
-/*if (!empty($_GET)) {
-        $pid = $_GET["pid"];
-        $result = mysqli_query($conn, "SELECT * FROM products WHERE productId = $pid");
-
-        
-        $resultVendor = mysqli_query($conn, "SELECT DISTINCT r.retailer_id, r.retailer_name FROM products p, retailer r WHERE p.vendor_id = r.retailer_id && p.productId= $pid");
-    } else {
-        header("location: home.php");
-        exit;
-    } */
-
-
 
 class Shopify {
 
@@ -69,7 +57,7 @@ class Shopify {
 
 	// Responsible for creating products through shopify api
 	private function createProductsShopify($data) {
-
+			
     		$product = [];
     		$product['product'] = [
             'title'=> $data['productName'],
@@ -90,15 +78,13 @@ class Shopify {
                     'inventory_quantity' => $data['Stock'],
                     'sku' =>$data['Stock']
                 ]
-            ],
+			],
             'image'=>  [
-				'src' => 'https://cdn.shopify.com/s/files/1/0516/3299/6539/products/product-image-998007610_350x350.jpg?v=1610002790'
-				]
-        ];
+				'src' => 'http://ankits-macbook-air.local/furniture/users/images/'.$data['productImage']
+			],
+			
+		];
 		
-		print_r($product);
-
-		$url = $this->storeUrl()."/admin/products.json";
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
@@ -166,10 +152,10 @@ class Shopify {
 	
 }
 
-// Launching migration process now
 $Shopify = new Shopify();
 $results = $Shopify->processProductsMigration();
-//header("Location: ./users/user_products.php");
-//echo "<pre>"; print_r($results);
+if ($results){
+	header("Location: ./users/user_products.php");
+}
 
 ?>

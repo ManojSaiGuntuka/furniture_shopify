@@ -28,8 +28,8 @@
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-			<li> <a href= "./users_login.php"> Users login </a> </li>
-				<li> <a href= "../index.php"> Home </a> </li>
+			<li> <a href= "./index.php"> Admin login </a> </li>
+				<li> <a href= "./index.php"> Home </a> </li>
                 			
 	               <li>
 

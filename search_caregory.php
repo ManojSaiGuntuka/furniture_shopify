@@ -64,7 +64,7 @@
 				</div>
                 <hr>
 				
-                <img class="img-responsive" src="images/<?php echo $productImage; ?>" alt="" height= "50" width= "400">
+                <img class="img-responsive" src="./users/images/<?php echo $productImage; ?>" alt="" height= "50" width= "400">
 				
                 <hr>
 				

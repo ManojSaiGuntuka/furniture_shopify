@@ -1,5 +1,14 @@
 <?php include "../inc/connect.php"; ?>
 <?php session_start(); ?>
+<?php
+
+   if(!(isset($_SESSION['adminId']))){
+
+      header("Location: index.php");
+
+   }
+
+?>
 <?php  include "includes/admin_header.php" ?>
 <div id="wrapper">
 <?php  include "includes/admin_navigation.php" ?>

@@ -18,11 +18,13 @@
    if (isset($_GET['retailer_id'])){
        
     $retailerData = $AF->getRetailer($_GET['retailer_id']);
+
     $retailer_name = $retailerData['username'];
     $retailer_address = $retailerData['user_address'];
     $retailer_group = $retailerData['user_group_id'];
     $user_email = $retailerData['user_email'];
-
+   
+    $groupCommision = $AF->getGroupCommission($retailer_group);
     $groups = $AF->getGroups();
 
    }
@@ -30,7 +32,7 @@
    if (isset($_POST['update_retailers'])){
        
     $groupdId = $_POST['retailer_group'];
-
+    $groupCommision = $AF->getGroupCommission($retailer_group);
     $AF->updateRetailer($_GET['retailer_id'], $groupdId);
 
    }
@@ -60,7 +62,9 @@
             <?php foreach($groups as $group){?>
                 <option class="" value=<?php echo $group['group_category']?>><?php echo $group['group_category']?></option>
             <?php }?>
-       </select>
+       </select><?php echo $groupCommision['commission']?>
+         
+      
 
    </div>
 

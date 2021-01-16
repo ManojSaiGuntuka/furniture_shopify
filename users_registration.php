@@ -1,8 +1,10 @@
 <?php  include "inc/connect.php"; ?>
- <?php  include "includes/header.php"; ?>
+ <?php  include "includes/header.php"; include "./DB.php";?>
 
  <?php 
- 
+
+
+
  if(isset($_POST['submit'])){
 
  $username = $_POST['username'];
@@ -25,15 +27,43 @@
  $user_group_id=mysqli_real_escape_string($conn,$user_group_id);
 
 
- $query = "INSERT INTO retailers(username, user_password,user_firstname,user_lastname,user_email,user_address,user_group_id) ";
+ function isRetailerNameExist($userName){
+
+    $db = new DB('PRODUCTS');
+    $userNameQuery = "select * from retailers where username = '$userName'";
+    $userData = $db->query($userNameQuery);
+    return sizeOf($userData);
+
+}
+
+function isRetailerEmailExist($email){
+
+    $db = new DB('PRODUCTS');
+    $userNameQuery = "select * from retailers where user_email = '$email'";
+    $userData = $db->query($userNameQuery);
+    return sizeof($userData);
+
+}
+ 
+ if(isRetailerNameExist($username) === 0 && isRetailerEmailExist($user_email) === 0){
+    $query = "INSERT INTO retailers(username, user_password,user_firstname,user_lastname,user_email,user_address,user_group_id) ";
  $query .= "VALUES('{$username}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}','{$user_address}','{$user_group_id}') ";
  $register_user_query = mysqli_query($conn, $query);
 
- if(!$register_user_query){
-   die("Query Failed" . mysqli_error($conn) . ' ' . mysqli_error($conn));
+ header("Location: ./index.php");
  }
+ 
+ else{
+    ?>
+    
+    <script>
+    
+        alert("Email/Username already exist")
 
-  $message = "Your Registration has been submitted!!!";
+    </script>
+    
+    <?php
+ }
 
  }else {
  	 $message = "Fields should not be empty!!";
@@ -61,7 +91,7 @@
                 <div class="form-wrap">
                 <h1>User Register</h1>
                     <form role="form" action="users_registration.php" method="post" id="login-form" autocomplete="off">
-                        <h5 class= "text-center"> <?php echo $message; ?></h5>
+                        
 						<div class="form-group">
                             <label for="username" class="sr-only">username</label>
                             <input type="text" name="username" id="username" class="form-control" placeholder="Enter Desired Username">

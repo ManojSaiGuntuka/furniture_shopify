@@ -1,5 +1,13 @@
 <?php include "../inc/connect.php"; include "./adminFunctions.php";?>
+<?php
 
+   if(!(isset($_SESSION['adminId']))){
+
+      header("Location: index.php");
+
+   }
+
+?>
 <?php  include "includes/admin_header.php" ?>
     <div id="wrapper">
 
@@ -64,7 +72,7 @@
 							echo "<td>$retailer_id </td>";
 							echo "<td>$retailer_address </td>";							
 							echo "<td>$retailer_name</td>";							
-							echo "<td>$retailer_group</td>";							
+							?><td><?php echo $retailer_group?>  <?php echo $AF->getGroupCommission($retailer_group)['commission']?></td><?php						
 							
 							
 							echo "<td><a href='edit_retailers.php?retailer_id={$retailer_id}'> Edit </a></td>";

@@ -1,6 +1,6 @@
 <?php
 
-    require_once('../DB.php');
+    include '../DB.php';
 
     
     if(session_status() == 1){
@@ -75,6 +75,59 @@
             $insertAdminQuery = "insert into admin(adminName, password, email) values('$adminName', '$password', '$email')";
             $insertAdmin = $this->getConnection()->query($insertAdminQuery);
             return $insertAdmin;
+
+        }
+
+        function isRetailerNameExist($userName){
+
+            $userNameQuery = "select * from retailers where username = '$userName'";
+            $userData = $this->getConnection()->query($userNameQuery);
+            return sizeOf($userData);
+
+        }
+
+        function isRetailerEmailExist($email){
+
+            $userNameQuery = "select * from retailers where user_email = '$email'";
+            $userData = $this->getConnection()->query($userNameQuery);
+            return $userData;
+
+        }
+
+        function insertRetailer($adminName, $email, $password){
+
+            $options = [
+                'cost' => 12,
+            ];
+            $password = password_hash($password, PASSWORD_BCRYPT, $options);
+
+            $insertAdminQuery = "insert into admin(adminName, password, email) values('$adminName', '$password', '$email')";
+            $insertAdmin = $this->getConnection()->query($insertAdminQuery);
+            return $insertAdmin;
+
+        }
+
+        function  getGroupCommission($retailerGroup){
+
+            $getCommissionQuery = "select commission from groups where group_category = '$retailerGroup'";
+            $getCommission = $this->getConnection()->query($getCommissionQuery);
+            return $getCommission[0];
+
+        }
+
+        function isGroup($groupName){
+
+            $getGroupNameQuery = "select * from groups where group_category = '$groupName'";
+            $getGroupName = $this->getConnection()->query($getGroupNameQuery);
+            return $getGroupName;
+
+        }
+
+        function isGroupCommission($groupCommission){
+
+            $getGroupCommissionQuery = "select * from groups where commission = '$groupCommission'";
+            $getGroupCommission = $this->getConnection()->query($getGroupCommissionQuery);
+            return $getGroupCommission;
 
         }
 

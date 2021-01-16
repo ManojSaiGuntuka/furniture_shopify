@@ -7,6 +7,12 @@ require_once('../DB.php');
         session_start();
     }
 
+    if(!(isset($_SESSION['user_id'])) && !(isset($_SESSION['adminId']))){
+
+        header("Location: ../users_login.php");
+
+    }
+
     class UserFunctions{
 
         private $CUR_USER_ID ;
@@ -93,19 +99,39 @@ require_once('../DB.php');
 
         }
 
-        function addToStore($product_name, $desc, $productImage, $newPrice, $watchListId, $product_id ){
+        function isProductStore($proId, $userId){
+
+            
+            $getProductQuery = "select * from productlist where product_id ='$proId' and user_id = '$userId'";
+            $getProduct = $this->getConnection()->query($getProductQuery);
+            return sizeOf($getProduct);
+
+        }
+
+        function addToStore($product_name, $desc, $productImage, $productColor, $newPrice, $watchListId, $product_id, $profit ){
 
             $user_id = $this->getUserId();
-            print_r($productImage);
-            $insertQuery = "insert into productlist(product_id, user_id, productName, productImage, productColor, productPrice, Stock, Description) 
-                        values('$product_id', '$user_id', '$product_name', '$productImage', '$productColor', '$newPrice', '$Stock', '$desc')";
+            
+            $userProducts = $this->isProductStore($product_id, $user_id);
+            if($userProducts === 0){
+                $insertQuery = "insert into productlist(product_id, user_id, productName, productImage, productColor, productPrice, Description, profit) 
+                            values('$product_id', '$user_id', '$product_name', '$productImage', '$productColor', '$newPrice', '$desc', '$profit')";
 
 
-            $this->getConnection()->query($insertQuery);
+                $this->getConnection()->query($insertQuery);
 
-            $this->addToShopify($this->getConnection()->lastInsertId());
+                $this->addToShopify($this->getConnection()->lastInsertId());
 
-            $this->deleteWatchList($watchListId);
+                $this->deleteWatchList($watchListId);
+
+                return true;
+
+            }else{
+
+                return False;
+
+            }
+            
 
         }
 
@@ -124,6 +150,11 @@ require_once('../DB.php');
             $user_id = $this->getUserId();
             $deleteQuery = "delete from productlist where user_id ='$user_id' and productId='$prod_id'";
             print_r($this->getConnection()->query($deleteQuery));
+            $this->deleteFromShopifyStore($prod_id);
+
+        }
+
+        function deleteFromShopifyStore($prod_id){
 
             header("Refresh:0");
 
@@ -138,9 +169,7 @@ require_once('../DB.php');
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_VERBOSE, 0);
-            //curl_setopt($curl, CURLOPT_HEADER, 1);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
-            //curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($product));
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             $response['data'] = curl_exec ($curl);
             if(curl_errno($curl))
