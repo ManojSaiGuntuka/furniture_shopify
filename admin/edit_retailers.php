@@ -55,14 +55,14 @@
    </div>
 
    <div class= "form-group">
-      <label for= "retailer_group"> Retailer Group : <?php echo $retailer_group?></label>
+      <label for= "retailer_group"> Retailer Group : <?php echo $retailer_group?> <?php print_r($AF->getGroupCommission($retailer_group)['commission'])?></label>
         <br/>
       <label for="retailer_group">Change Retailer Group to : </label>
        <select name="retailer_group">
             <?php foreach($groups as $group){?>
-                <option class="" value=<?php echo $group['group_category']?>><?php echo $group['group_category']?></option>
+                <option class="" value=<?php echo $group['group_category']?>><?php echo $group['group_category']?>  <?php echo $AF->getGroupCommission($group['group_category'])['commission']?></option>
             <?php }?>
-       </select><?php echo $groupCommision['commission']?>
+       </select>
          
       
 
