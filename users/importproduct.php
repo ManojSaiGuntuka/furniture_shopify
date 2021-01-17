@@ -767,7 +767,7 @@
                                                                <td>
                                                                   <div class="money-view">
                                                                      <div class="money-view_field money-view_field-original">
-                                                                        C$ <span id = "price"><?php 
+                                                                        C$ <span class="price"><?php
                                                                            $priceMargin = $UF->getMargin();
                                                                            $priceToAdd = $watchListData[$index]['productPrice']*((int)$priceMargin / 100);
                                                                            echo $watchListData[$index]['productPrice']+$priceToAdd;
@@ -778,7 +778,7 @@
                                                                <td>
                                                                   <div class="money-view">
                                                                      <div class="money-view_field money-view_field-original">
-                                                                        C$ <span id="shippingCost"> 50.20</span>
+                                                                        C$ <span class="shippingCost"> 50.20</span>
                                                                      </div>
                                                                   </div>
                                                                </td>
@@ -796,7 +796,7 @@
                                                                                     $priceToAdd = $watchListData[$index]['productPrice']*((int)$priceMargin / 100);
                                                                                     echo $watchListData[$index]['productPrice']+$priceToAdd + $shipping_charge; 
                                                                                     
-                                                                                    ?>">
+                                                                                    ?>" >
                                                                               </div>
                                                                            </div>
                                                                         </div>
@@ -809,7 +809,7 @@
                                                                         <div class="input-block">
                                                                            <div class="input-field">
                                                                               <div class="money-view_field money-view_field-original">
-                                                                                 <input type="text" class="form-control customNewPrice" readonly id="profit_input" name="profit_input" value="0"/>
+                                                                                 <input type="text" class="form-control customProfit" readonly id="profit_input" name="profit_input" value="0"/>
                                                                               </div>
                                                                            </div>
                                                                         </div>
@@ -998,25 +998,25 @@
          
       </script>
       <script>
+
          $(document).ready(function(){
-           
-            $(".customPrice").on("change", function(){
 
-               var price = $("#price").html();
-               
-               let shippingCost = $('#shippingCost').html();
+             var price = $( "input.customPrice" );
+             var shippingCost = $( "td .shippingCost" );
+             var cost = $( "td .price" );
+             var customProfit = $( "td .customProfit" );
 
-               let newPrice = (parseFloat($(this).val()) - (parseFloat(price) + parseFloat(shippingCost))).toFixed(2)
-               $("#profit_input").val(newPrice)
-               console.log(shippingCost, price)
+             $('.customPrice').change(function(){
+                 var priceText = $(this).closest('tr').find(price).val();
+                 var shippingCostText = $(this).closest('tr').find(shippingCost).text();
+                 var costText = $(this).closest('tr').find(cost).text();
 
-            });
-            
-         
+                 var profit = parseFloat(priceText) - (parseFloat(costText) + parseFloat(shippingCostText));
+
+
+                 $(this).closest('tr').find(customProfit).val((profit).toFixed(2));
+             });
          });
-         
-         
-         
       </script>
    </body>
 </html>

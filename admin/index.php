@@ -20,8 +20,7 @@
   }else {
   ?>
     <script>
-       // alert("Incorrect Credentials Entered")
-       // location.reload()
+       alert("Incorrect Credentials Entered")
     </script>
     <?php
     }

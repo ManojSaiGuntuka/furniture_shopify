@@ -4,9 +4,7 @@
 
    $UF = new UserFunctions();
 
-   $OrderData = $UF->getOrders()['data'];// The Store Data
-
-   print_r($OrderData);
+   $OrderData = $UF->getOrders()['data'];
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +40,7 @@
                            <div class="scroll">
                               <ul class="pages">
                                  <li class="nav-item">
-                                    <a href="home.php">
+                                    <a href="user_index.php">
                                        <span class="nav-item_icon">
                                           <svg class="icon-base">
                                              <use xlink:href="#icon-sidebar-home">

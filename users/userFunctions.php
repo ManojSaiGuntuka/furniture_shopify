@@ -26,7 +26,11 @@ require_once('../DB.php');
         }
 
         function __construct(){
-            $this->CUR_USER_ID = $_SESSION['user_id'];
+
+            if(isset($_SESSION['user_id'])){
+                $this->CUR_USER_ID = $_SESSION['user_id'];
+            }
+            
         }
         
         function getUserId(){
@@ -180,6 +184,24 @@ require_once('../DB.php');
             return $response;
 
         }
+
+        function getEarnings(){
+
+            $allOrders = $this->getOrders();
+            $json = json_decode($allOrders['data'], 1);
+
+            $ordersStatus = $json['orders'];
+
+            foreach ($ordersStatus as $rkey => $orderStatus){
+                if ($orderStatus['fulfillment_status'] == 'fulfilled'){
+                    $fullOrders[] = $orderStatus['total_price'];
+                }
+            }
+
+            return $fullOrders[0];
+
+        }
+
 
         function getMargin(){
 

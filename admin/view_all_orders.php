@@ -16,6 +16,7 @@ if(isset($_GET['cancel'])){
 
 $allOrdersData = $UF->getOrders();
 
+
 //$allOrders = json_decode($allOrdersData['data']);
 
 $json = json_decode($allOrdersData['data'], 1);
@@ -52,7 +53,14 @@ $selectedStatus = array();
     <?php  include "includes/admin_navigation.php" ?>
     <div id="page-wrapper">
         <div class="container-fluid">
-
+        <div class="orderButton">
+                                <div class="orderbtn totalOrder" style="max-width:30%; margin-left:10%">                                    
+                                        <div class="order-detail">
+                                            <h3 class="orderTitle" style="color: black">Total Earnings</h3>
+                                            <span class="order-nos">$   <?php echo $UF->getEarnings($allOrdersData);?></span>
+                                        </div>
+                                </div>
+        
             <div class="order-dashboard">
                         <div class="orderStatics">
                             <div class="title">
