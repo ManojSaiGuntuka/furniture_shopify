@@ -581,7 +581,7 @@
                                                 </div>
                                              </div>
                                              <div class="tab-content tabs-2" >
-                                                <textarea name="new_description"><?php echo $watchListData[0]['Description']?></textarea>
+                                                <textarea name="new_description"><?php echo $watchListData[$index]['Description']?></textarea>
                                              </div>
                                              <div class="tab-content tabs-3"  >
                                                 <div class="import-list-variants-tab" >

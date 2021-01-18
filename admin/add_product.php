@@ -1,4 +1,4 @@
-<?php include "../inc/connect.php"; ?>
+<?php include "../inc/connect.php"; include "../DB.php";?>
 <?php session_start(); ?>
 <?php
 
@@ -7,6 +7,8 @@
       header("Location: index.php");
 
    }
+
+   $db = new DB('PRODUCTS');	
 
 ?>
 <?php  include "includes/admin_header.php" ?>
@@ -22,8 +24,19 @@
    Add Products					   
 </h1>
 <?php 
+
+   function getMatId($db){
+
+      $getMatquery = "select * from material";
+      $getMat = $db->query($getMatquery);
+      return $getMat;
+
+   }
+
    if(isset($_POST['create_product'])){
    
+   $vendorId = $_SESSION['adminId'];
+   $matId = $_POST['matId'];   
    $categoryId = $_POST['categoryId'];
    $productCode = $_POST['productCode'];
    $productName = $_POST['productName'];
@@ -42,8 +55,9 @@
    
    move_uploaded_file($product_image_temp, "../users/images/$productImage");
    
-   $query = "INSERT INTO products(categoryId, productCode, productName, productStatus, productImage, shippingDate, productColor, productSize, productPrice, Stock, Description, cat_title) ";
-   $query .= "VALUES({$categoryId},'{$productCode}', '{$productName}', '{$productStatus}', '{$productImage}', now(), '{$productColor}', '{$productSize}', '{$productPrice}','{$stock}', '{$Description}' ,'{$cat_title}') ";
+   $query = "insert into products(categoryId, productCode, productName, productStatus, productImage, shippingDate, productColor, productSize, productPrice, Stock, mat_id, vendor_id, Description) ";
+   $query .= "values({$categoryId},'{$productCode}', '{$productName}', '{$productStatus}', '{$productImage}', now(), '{$productColor}', '{$productSize}', '{$productPrice}','{$stock}', '{$matId}', '{$vendorId}','{$Description}')";
+   
    $create_product_query = mysqli_query($conn, $query);
    
    if(!$create_product_query){
@@ -83,6 +97,23 @@
    <div class= "form-group">
       <label for= "productCode"> Product Code </label>
       <input  type="text" class= "form-control" name="productCode">
+   </div>
+   <div class= "form-group">
+      <label for= "productCode"> Mat Code </label>
+      <select name="matId">
+         <?php 
+         
+         $materials = getMatId($db);
+         
+         foreach($materials as $mat){
+            ?>
+               <option value="<?php echo $mat['mat_id']?>"><?php echo $mat['mat_title']?></option>
+            <?php
+         }
+         
+         ?>
+      </select>
+
    </div>
    <div class= "form-group">
       <label for= "productColor"> Product Color</label>

@@ -44,7 +44,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                          <h1 class="page-header">
-                           Users Login  
+                           Admin Login  
                         </h1> 
                
                     <form role="form" action="" method="post" id="login-form" autocomplete="off">

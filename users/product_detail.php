@@ -24,7 +24,6 @@ if (!empty($_GET)) {
       
       $UF->insertIntoWatchList($_GET["pid"]);
 
-      header("Location:./importproduct.php");
     }
 ?>
 
