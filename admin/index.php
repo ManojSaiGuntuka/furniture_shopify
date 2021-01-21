@@ -20,7 +20,7 @@
   }else {
   ?>
     <script>
-       alert("Incorrect Credentials Entered")
+       //alert("Incorrect Credentials Entered")
     </script>
     <?php
     }

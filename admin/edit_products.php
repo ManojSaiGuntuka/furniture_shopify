@@ -21,6 +21,14 @@
 	if(isset($_GET['products_id'])){
     $get_products_id = $_GET['products_id'];
 
+    function getMat($db){
+
+        $getMatquery = "select * from material";
+        $getMat = $db->query($getMatquery);
+        return $getMat;
+  
+     }
+
 }
 
 $query = "SELECT * FROM products WHERE productId = $get_products_id ";
@@ -102,6 +110,7 @@ echo "<p> Product Updated. <a href='view_all_products.php?products_id={$get_prod
 </div>
 
 <div class= "form-group">
+<label for= "productName"> Select Category : </label>
 <select name="cat_title" for ="cat_title" id="">
 
 <?php 
@@ -114,7 +123,7 @@ die("Querry Failed" . mysqli_error($conn));
 while($row = mysqli_fetch_assoc($select_categories)){
 $cat_id = $row['cat_id'];
 $cat_title = $row['cat_title'];
-     echo "<option value='$cat_id'>{$cat_title}</option>";								
+     echo "<option value='$cat_id'> {$cat_title}</option>";								
     								
 	}
 
@@ -128,6 +137,24 @@ $cat_title = $row['cat_title'];
 <div class= "form-group">
 <label for= "productCode"> Product Code </label>
 <input  value= "<?php echo $productCode; ?>" type="text" class= "form-control" name="productCode">
+</div>
+
+<div class= "form-group">
+      <label for= "productCode"> Materials :   </label>
+      <select name="matId">
+      <?php 
+         
+         $materials = getMat($conn);
+         
+         foreach($materials as $mat){
+            ?>
+               <option value="<?php echo $mat['mat_id']?>"><?php echo $mat['mat_title']?></option>
+            <?php
+         }
+         
+         ?>
+      </select>
+
 </div>
 
 <div class= "form-group">

@@ -104,7 +104,6 @@
    
    $query = "DELETE FROM products WHERE productId ={$get_product_id} ";
    $delete_query = mysqli_query($conn, $query);
-   header("Location: view_all_products.php");
    }
    
    ?>

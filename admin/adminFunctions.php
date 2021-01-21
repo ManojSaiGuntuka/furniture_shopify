@@ -65,17 +65,37 @@
 
         }
 
-        function insertAdmin($adminName, $email, $password){
+        function insertAdmin($adminName, $email, $password, $address){
 
             $options = [
                 'cost' => 12,
             ];
             $password = password_hash($password, PASSWORD_BCRYPT, $options);
 
-            $insertAdminQuery = "insert into admin(adminName, password, email) values('$adminName', '$password', '$email')";
+            $insertAdminQuery = "insert into admin(adminName, password, email, address) values('$adminName', '$password', '$email', '$address')";
             $insertAdmin = $this->getConnection()->query($insertAdminQuery);
             return $insertAdmin;
 
+        }
+
+        function getAdmin($adminId){
+
+            $getAdminQuery = "select * from admin where adminId = '$adminId'";
+            $getAdmin = $this->getConnection()->query($getAdminQuery);
+            return $getAdmin[0];
+
+        }
+
+        function editAdmin($adminId, $adminName, $address, $email, $password){
+
+            $options = [
+                'cost' => 12,
+            ];
+            $newPassword = password_hash($password, PASSWORD_BCRYPT, $options);
+
+            $editAdminQuery = "update admin set adminName = '$adminName', password = '$newPassword', email = '$email', address = '$address' where adminId = '$adminId'";
+            $this->getConnection()->query($editAdminQuery);
+           
         }
 
         function isRetailerNameExist($userName){
@@ -146,7 +166,9 @@
                     $_SESSION['adminName'] = $userDetail[0]['adminName'];
 
                     header("Location: view_all_products.php");
-
+                    
+                }else{
+                    return false;
                 }
 
             }else{

@@ -9,12 +9,13 @@
  $adminName = $_POST['adminName'];
  $email    = $_POST['email'];
  $password = $_POST['password'];
+ $address = $_POST['address'];
 
  if(!empty($adminName) && !empty($email) && !empty($password)) {
  
     if ($AF->isUserNameExist($adminName) === 0 && $AF->isUserNameExist($adminName) === 0){
 
-        if(sizeOf($AF->insertAdmin($adminName, $email, $password)) === 1){
+        if(sizeOf($AF->insertAdmin($adminName, $email, $password, $address)) === 1){
 
             ?>
                 <script>
@@ -59,19 +60,26 @@
                            Users Registration Form  
                         </h1> 
                
-                    <form role="form" action="users_register.php" method="post" id="login-form" autocomplete="off">
+                    <form role="form" action="users_register.php" method="post" id="login-form" required autocomplete="off">
 
 						<div class="form-group">
                             <label for="adminName" class="sr-only">username</label>
-                            <input type="text" name="adminName" id="adminName" class="form-control" placeholder="Enter Desired Username">
+                            <input type="text" name="adminName" id="adminName" class="form-control" required placeholder="Enter Desired Username">
                         </div>
+
                          <div class="form-group">
                             <label for="email" class="sr-only">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="somebody@example.com">
+                            <input type="email" name="email" id="email" class="form-control" required placeholder="somebody@example.com">
                         </div>
+
+                        <div class="form-group">
+                            <label for="email" class="sr-only">Address</label>
+                            <input type="text" name="address" id="address" class="form-control" required placeholder="311 New Carolina, New York, USA">
+                        </div>
+
                          <div class="form-group">
                             <label for="password" class="sr-only">Password</label>
-                            <input type="password" name="password" id="key" class="form-control" placeholder="Password">
+                            <input type="password" name="password" id="key" class="form-control" required placeholder="Password">
                         </div>
                 
                         <input type="submit" name="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="Register">

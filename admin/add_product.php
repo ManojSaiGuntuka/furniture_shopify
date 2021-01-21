@@ -77,7 +77,8 @@
       <input  type="text" class= "form-control" name="productName">
    </div>
    <div class= "form-group">
-      <select name="categoryId" id="">
+   <label for= "productName"> Select Category :  </label>
+      <select name="categoryId" id=""> 
       <?php 
          $query = "SELECT * FROM category";
          $select_categories = mysqli_query($conn, $query);
@@ -99,7 +100,7 @@
       <input  type="text" class= "form-control" name="productCode">
    </div>
    <div class= "form-group">
-      <label for= "productCode"> Mat Code </label>
+      <label for= "productCode"> Materials :   </label>
       <select name="matId">
          <?php 
          

@@ -49,23 +49,26 @@
                     
 
 					<li>
-                        <a href="./view_all_categories.php"> <i class="fa fa-fw fa-wrench"></i> Categories  </i> </a>
+                        <a href="./view_all_categories.php"> <i class="fa fa-fw fa-wrench"></i> &nbsp;Categories  </i> </a>
                     </li>		
 
 					
 					<li>
-                        <a href="./view_all_products.php"> <i class="fa fa-fw fa-arrows-v"></i>  Products </i> </a>
+                        <a href="./view_all_products.php"> <i class="fa fa-fw fa-arrows-v"></i>  &nbsp;Products </i> </a>
                     </li>
                      
 					<li>
-                        <a href="./view_all_orders.php"> <i class="fas fa-clipboard fa-lg"></i> Orders  </i> </a>
+                        <a href="./view_all_orders.php"> <i class="fas fa-clipboard fa-lg"></i> &nbsp; Orders  </i> </a>
                     </li>
 					<li>
-                        <a href="./view_all_groups.php"> <i class="fa fa-users"></i> Groups  </i> </a>
+                        <a href="./view_all_groups.php"> <i class="fa fa-users"></i> &nbsp; Groups  </i> </a>
                     </li>
 					<li>
-                        <a href="./view_all_retailers.php"> <i class="fa fa-bitbucket"></i> Retailers  </i> </a>
-                    </li>					
+                        <a href="./view_all_retailers.php"> <i class="fa fa-bitbucket"></i> &nbsp; Retailers  </i> </a>
+                    </li>
+                    <li>
+                        <a href="./edit_admin.php?editAdminId=<?php echo $_SESSION['adminId']?>"> <i class="fa fa-user"></i> &nbsp; General Settings  </i> </a>
+                    </li>						
                 </ul>
             </div>
             <?php } ?>

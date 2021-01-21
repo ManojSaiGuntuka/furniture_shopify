@@ -50,7 +50,7 @@
          echo "<td>$cat_id </td>";
          echo "<td>$cat_title </td>";							
          echo "<td>$cat_tags</td>";
-         echo "<td><img width='100' src ='../users/images/$cat_image' alt='image'></td>";
+         echo "<td><img width='100' src ='../users/images/product/$cat_image' alt='image'></td>";
          echo "<td>$cat_date</td>";
          
          $query = "SELECT * FROM category WHERE cat_id = {$cat_id}";

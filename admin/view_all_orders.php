@@ -7,10 +7,6 @@ include "includes/admin_header.php";
 include "../users/userFunctions.php";
 
 $UF = new UserFunctions();
-
-if(isset($_GET['cancel'])){
-    //$AF->deleteRetailer($_GET['delete']);
-}
 ?>
 <?php
 
@@ -26,27 +22,39 @@ $ordersStatus = $json['orders'];
 $numOfFullFilled = 0;
 $numOfPending = 0;
 
-
 foreach ($ordersStatus as $rkey => $orderStatus){
 	if ($orderStatus['fulfillment_status'] == 'fulfilled'){
 		$fullOrders[] = $orderStatus;
 	}
 	if ($orderStatus['fulfillment_status'] == '') {
 		$pendingOrders[] = $orderStatus;
+	}if ($orderStatus['financial_status'] == 'refunded') {
+		$canceldOrders[] = $orderStatus;
 	}
 }
 
-print_r(sizeOf($fullOrders), 6);
+
+if(isset($_POST['close'])){
+
+    header("Location: ./view_all_orders.php");
+
+}
 
 $fulfilled = array();
+$cancelledOrders = array();
 $pending = array();
 $allRecords = array();
 $selectedStatus = array();
 
+
 ?>
+
     <link rel="stylesheet" href="./css/panel.css" />
     <link rel="stylesheet" href="./css/order.css" />
-	<link rel="stylesheet" href="./css/orderStyle.css" />
+    <link rel="stylesheet" href="./css/orderStyle.css" />
+    <link rel="stylesheet" href="./css/buttonsStyle.css" />
+    <link rel="stylesheet" href="./css/popupStyle.css" />
+
 <body>
 
 <div id="wrapper">
@@ -54,13 +62,31 @@ $selectedStatus = array();
     <div id="page-wrapper">
         <div class="container-fluid">
         <div class="orderButton">
-                                <div class="orderbtn totalOrder" style="max-width:30%; margin-left:10%">                                    
-                                        <div class="order-detail">
-                                            <h3 class="orderTitle" style="color: black">Total Earnings</h3>
-                                            <span class="order-nos">$   <?php echo $UF->getEarnings($allOrdersData);?></span>
-                                        </div>
-                                </div>
+                        
+        <div class="btn-group">
+            <a href="./add_product.php">Add New Product</a>
+            <a href="./add_categories.php">Add New Category</a>
+            <a href="./add_groups.php">Add New Group</a>
+            <a href="./view_all_retailers.php">View All Retailers</a>
+        </div>
+        <?php
+
         
+        
+        if(isset($_POST['cancelOrder'])){
+        
+            $productId = $_GET['productId'];
+            
+            $cancellationReason = $_POST['cancellationReason'];
+            $cancellationCharges = $_POST['cancellationCharges'];
+
+            unset($_GET['productId']);
+        
+            $UF->cancelOrder($productId, $cancellationReason, $cancellationCharges);
+            
+        
+        }
+        ?>
             <div class="order-dashboard">
                         <div class="orderStatics">
                             <div class="title">
@@ -111,13 +137,21 @@ $selectedStatus = array();
                                             </use>
                                         </svg>
                                         <div class="order-detail">
-                                            <span class="orderTitle">Processed Orders</span>
-                                            <span class="order-nos"><?php echo sizeOf($pendingOrders) ?></span>
+                                            <span class="orderTitle">Proccessing Orders</span>
+                                            <span class="order-nos"><?php 
+                                            
+                                            if(isset($pendingOrders)){
+                                                echo sizeOf($pendingOrders);
+                                            }else{
+                                                echo 0;
+                                            }
+
+                                            ?></span>
                                         </div>
                                     </a>
                                 </div>
                                 <div class="orderbtn cancelledOrder">
-                                    <a href="#" class="cancel">
+                                    <a href="view_all_orders.php?status=cancelled" class="cancel">
                                         <svg class="icon">
                                             <use xlink:href="#icon-danger-circle">
                                                 <symbol id="icon-danger-circle" viewBox="0 0 20 20">
@@ -130,7 +164,15 @@ $selectedStatus = array();
                                         </svg>
                                         <div class="order-detail">
                                             <span class="orderTitle">Cancelled Orders</span>
-                                            <span class="order-nos">0</span>
+                                            <span class="order-nos"><?php
+                                            
+                                            if(isset($canceldOrders)){
+                                                echo sizeOf($canceldOrders);
+                                            }else{
+                                                echo 0;
+                                            }
+                                            
+                                            ?></span>
                                         </div>
                                     </a>
                                 </div>
@@ -151,15 +193,66 @@ $selectedStatus = array();
                                         </svg>
                                         <div class="order-detail">
                                             <span class="orderTitle">Completed Orders</span>
-                                            <span class="order-nos" ><?php echo sizeOf($fullOrders)?></span>
+                                            <span class="order-nos" ><?php 
+                                            
+                                                if(isset($fullOrders)){
+                                                    print_r(sizeOf($fullOrders));
+                                                }else{
+
+                                                    echo 0;
+
+                                                }
+
+                                            ?></span>
                                         </div>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="form-popup" id="myForm">
+                                    <form method = "POST" class="form-container">
+                                        <h1>Cancel Order</h1>
+
+                                    <label for="Cancellation Reason"><b>Cancellation Reason</b></label><br>
+                                    <textarea name="cancellationReason" ></textarea>
+                                    
+                                    <br>
+
+                                    <label for="charges"><b>Cancellation Charges To Apply For User</b></label>
+                                    <input type="text" value=0 name="cancellationCharges" required>
+
+                                    <label for="charges"><b>Refund Amount</b></label>
+                                    <input type="text" value=0 name="cancellationCharges" required>
+                                    
+                                    <b>Notes</b>
+                                    <ol>
+
+                                        <li>Set the cancellation charges as per the Order and Delivery Status. Also, the expected payouts
+                                            shown here are just for your review to check how much to pay if the order will de delivered.
+                                        </li>
+
+                                        <li>
+                                            If this order contains any wallet settlement than wallet amount will be
+                                            refunded back to User's wallet as soon as you mark this order as 'CANCEL'.
+                                        </li>
+
+                                        <li>
+                                            Cancellation charges is not applicable on status 'Payment not initiated'
+                                        </li>
+
+                                    </ol>
+
+                                    <input type="submit" name="cancelOrder" class="btn" value="Cancel Order">
+                                    <input type="submit" name="close" class="btn cancel" value="Close">
+                                    
+
+                                </form>
+                            </div>
+                        </div>
 
                         <div class="order-table">
-                            <table class="order-table_table">
+                            <table class="order-table_table" cellspacing=10 cellpadding="5px">
                                 <thead class="order-table_thead">
                                 <tr>
                                     <th class="order-no">Order No#</th>
@@ -199,6 +292,8 @@ $selectedStatus = array();
                                     }
                                     if ($orderStatus['fulfillment_status'] == 'fulfilled' || $orderStatus['fulfillment_status'] == ''){
                                         $allRecords[] = $orderStatus;
+                                    }if ($orderStatus['financial_status'] == 'refunded') {
+                                        $cancelledOrders[] = $orderStatus;
                                     }
                                 }
 
@@ -208,12 +303,17 @@ $selectedStatus = array();
                                     $selectedStatus = $fulfilled;
                                 }elseif(isset($_GET['status']) && $_GET['status'] == "no"){
                                     $selectedStatus = $allRecords;
+                                }elseif(isset($_GET['status']) && $_GET['status'] == "cancelled"){
+                                    $selectedStatus = $cancelledOrders;
                                 }else{
                                     $selectedStatus = $allRecords;
                                 }
 
+                                
+
                                 foreach ($selectedStatus as $item){?>
                                     <tr>
+                                        <input type="hidden" name="cancelproductId" value=<?php echo $item['id']?>>
                                         <td><?php echo $item['id']; ?></td>
                                         <td><?php echo $item['created_at']; ?></td>
                                         <td class="user-name"><?php if(isset($item['customer']['first_name'])){ echo $item['customer']['first_name']; }if(isset($item['customer']['last_name'])){ echo $item['customer']['last_name']; } ?><br />Phone: <?php if(isset($item['customer']['phone'])){ echo $item['customer']['phone']; } ?></td>
@@ -221,23 +321,59 @@ $selectedStatus = array();
                                         <td></td>
                                         <td><?php echo $item['total_price']; ?></td>
 										<td><?php 
-											if($item['fulfillment_status'] === null){
-												echo "Pending";
-											}else{
-												echo $item['fulfillment_status'];
-											}
+											echo $item['financial_status'];
 										?></td>
-                                        <td><?php echo $item['payment_gateway_names'][0] ; ?></td>
-                                        <td class="cancelledbtn"><a onClick = "javascript: return confirm('Are you sure you want to cancel order?   '); " href="view_all_orders.php?cancel=<?php echo $item['id']; ?>">Cancel Order</a></td>
+                                        <td><?php
+                                        
+                                        $payment = $item['payment_gateway_names'];
+
+                                        if(sizeOf($payment)>0){
+                                            echo $payment[0];
+                                        }else{
+                                            echo "Unkonwn";
+                                        }
+                                        
+                                        ?></td>
+                                        <td class="cancelledbtn"><a href="./view_all_orders.php?productId=<?php echo $item['id']?>"><button class= "btn btn-primary"  >Cancel Order</button></td></a>
                                     </tr>
                                 <?php } ?>
                                 </tbody>
                             </table>
-                        </div>
+
+                            
+
             </div>
 
         </div>
     </div>
 </div>
+<?php
+if(isset($_GET['productId'])){
+
+?>
+
+<script>
+
+    function openForm() {
+        
+        document.getElementById("myForm").style.display = "block";
+        var x = document.getElementsByTagName("BODY")[0]
+        console.log(x)
+        
+    }
+    
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
+
+    openForm()
+
+</script>
+
+<?php
+
+}?>
 </body>
 </html>
+
+

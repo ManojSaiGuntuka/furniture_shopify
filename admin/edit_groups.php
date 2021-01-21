@@ -1,10 +1,10 @@
 <?php include "../inc/connect.php"; ?>
 
 <?php session_start(); ?>
-<?php  include "includes/admin_header.php" ?>
+<?php  include "includes/admin_header.php"; include "./adminFunctions.php"; ?>
     <div id="wrapper">
 
-       <?php  include "includes/admin_navigation.php" ?>
+       <?php  include "includes/admin_navigation.php"; $AF = new AdminFunctions(); ?>
             <!-- /.navbar-collapse -->        
 
         
@@ -36,21 +36,33 @@ if(isset($_GET['group_id'])){
 		                    //$groupId = $_POST['groupId'];
 							$group_name = $_POST['group_name'];														
 							$commission = $_POST['commission'];
-							$group_category = $_POST['group_category'];							
+                            $group_category = $_POST['group_category'];
+                            							
+                
+                $conditionForGroup = (sizeof($AF->isGroup($group_category)) === 0 || sizeOf($AF->isGroupCommission($commission)) === 0);
+                print($conditionForGroup);
+                if($conditionForGroup){
+                    $query = "UPDATE groups SET ";
+                    $query .="group_name = '{$group_name}', ";
+                    $query .="commission = '{$commission}', ";
+                    $query .="group_category = '{$group_category}'";
 
-$query = "UPDATE groups SET ";
-$query .="group_name = '{$group_name}', ";
-$query .="commission = '{$commission}', ";
-$query .="group_category = '{$group_category}'";
+                    $query .= "WHERE groupId= {$get_group_id} ";
+                    $update_groups = mysqli_query($conn, $query);
 
-$query .= "WHERE groupId= {$get_group_id} ";
-$update_groups = mysqli_query($conn, $query);
-
-if(!$update_groups){
-die("Querry Failed" . mysqli_error($conn));
+                    if(!$update_groups){
+                    die("Querry Failed" . mysqli_error($conn));
+                }else{
+                    ?>
+                        <script>
+                            
+                        </script>
+                    <?php
+                }
+                    
 }
 
-echo  "<P> groups Updated: " . " " . "<a href='view_all_groups.php'> View all groups </a>";
+echo  "<a href='view_all_groups.php'> View all groups </a>";
 
 
 }
