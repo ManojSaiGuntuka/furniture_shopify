@@ -12,9 +12,6 @@ $UF = new UserFunctions();
 
 $allOrdersData = $UF->getOrders();
 
-
-//$allOrders = json_decode($allOrdersData['data']);
-
 $json = json_decode($allOrdersData['data'], 1);
 
 $ordersStatus = $json['orders'];
@@ -26,7 +23,7 @@ foreach ($ordersStatus as $rkey => $orderStatus){
 	if ($orderStatus['fulfillment_status'] == 'fulfilled'){
 		$fullOrders[] = $orderStatus;
 	}
-	if ($orderStatus['fulfillment_status'] == '') {
+	if ($orderStatus['fulfillment_status'] == '' && $orderStatus['financial_status'] != 'paid') {
 		$pendingOrders[] = $orderStatus;
 	}if ($orderStatus['financial_status'] == 'refunded') {
 		$canceldOrders[] = $orderStatus;
@@ -39,6 +36,13 @@ if(isset($_POST['close'])){
     header("Location: ./view_all_orders.php");
 
 }
+
+if(isset($_POST['deleteOrder'])){
+
+    $UF->deleteOrder($_POST['deleteOrder']);
+
+}
+
 
 $fulfilled = array();
 $cancelledOrders = array();
@@ -68,6 +72,7 @@ $selectedStatus = array();
             <a href="./add_categories.php">Add New Category</a>
             <a href="./add_groups.php">Add New Group</a>
             <a href="./view_all_retailers.php">View All Retailers</a>
+            <a href="./edit_admin.php?editAdminId=<?php echo $_SESSION['adminId']?>">General Settings</a>
         </div>
         <?php
 
@@ -264,6 +269,8 @@ $selectedStatus = array();
                                     <th class="order-placed">Order Status</th>
                                     <th class="payment-mode">Payment Mode</th>
                                     <th class="action">Action</th>
+                                    <th class="action">Shipping</th>
+                                    <th class="action">Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody class="order-table_tbody">
@@ -287,7 +294,7 @@ $selectedStatus = array();
                                     if ($orderStatus['fulfillment_status'] == 'fulfilled'){
                                         $fulfilled[] = $orderStatus;
                                     }
-                                    if ($orderStatus['fulfillment_status'] == '') {
+                                    if ($orderStatus['fulfillment_status'] == '' && $orderStatus['financial_status'] != 'paid') {
                                         $pending[] = $orderStatus;
                                     }
                                     if ($orderStatus['fulfillment_status'] == 'fulfilled' || $orderStatus['fulfillment_status'] == ''){
@@ -334,9 +341,38 @@ $selectedStatus = array();
                                         }
                                         
                                         ?></td>
-                                        <td class="cancelledbtn"><a href="./view_all_orders.php?productId=<?php echo $item['id']?>"><button class= "btn btn-primary"  >Cancel Order</button></td></a>
+                                        <?php if ($item['financial_status'] != 'refunded' && $item['financial_status'] != 'partially_refunded'){?>
+                                            <td class="cancelledbtn"><a class= "btn btn-primary"  href="./view_all_orders.php?productId=<?php echo $item['id']?>">Cancel Order</a></td>
+                                        <?php } else{?>
+                                            <td class="cancelledbtn">Cannot Cancel a Refunded Order</td>
+                                        <?php }?>
+                                        <?php if($item['financial_status'] === 'paid'){?>    
+                                            <td class="cancelledbtn">
+                                                Pick Shipper
+                                                <select name="shipper">
+                                                    <option value="ups"> UPS </option>
+                                                    <option value="canadapost"> Canada Post </option>
+                                                    <option value="fedex"> FedEx </option>
+                                                    <option value="dhl"> DHL </option>
+                                                </select>
+                                            <form method="post">                                        
+                                                <input type="submit" name="ship" value="Assign Shipping"/>
+                                            </form>
+                                            </td>
+                                        <?php } else{?>
+                                        <td>Not Applicable for Unpaid Orders</td>
+                                            <?php }?>
+                                        <td>
+                                        
+                                            <form method="post">
+                                                <button type="submit" name="deleteOrder" value=<?php echo $item['id']?> class= "btn btn-primary">Delete This Order</button>
+                                            </form>
+                                        
+                                        </td>
+                                        
                                     </tr>
                                 <?php } ?>
+                                
                                 </tbody>
                             </table>
 

@@ -1,47 +1,158 @@
+
+<?php
+
+  include "./userFunctions.php";
+
+  $UF = new UserFunctions();
+
+  $data = $UF->getFullOrders();
+
+  $json = json_decode($data['data'], 1);
+
+  $orders = $json['orders'];
+
+  $earnings = array();
+  $earnings2 = array();
+
+  $from = null;
+  $to = null;
+
+  if(isset($_POST["showRecords"])){
+
+    $from = $_POST['from'];
+    $to = $_POST['to'];
+
+    header("location: totalSale.php?from=".$from."&to=".$to);
+
+  }
+
+
+
+  if(!(isset($_GET["from"]) && isset($_GET["to"]))){
+
+    foreach ($orders as $order){
+
+      $myOrders[] = $order;
+      $myOrdersTotalPrice[] = $order["total_price"];
+      $myOrdersTotalCost[] = $order['total_price_usd'];
+
+      $date = strtotime($order['created_at']);
+      array_push($earnings, array("x" => intval($date*1000), "y" => floatval($order['total_price'])));
+  
+      }
+
+    foreach ($orders as $order){
+  
+        $date = strtotime($order['created_at']);
+        array_push($earnings2, array("x" => intval($date*1000), "y" => floatval($order['total_price_usd'])));
+  
+      }
+      
+    }
+    //print_r(array_sum($myOrdersTotalPrice));
+    //print_r(array_sum($myOrdersTotalCost));
+
+  if(isset($_GET["from"]) && isset($_GET["to"])){
+    
+    $from = $_GET["from"];
+    $to = $_GET["to"];
+  }
+
+  foreach ($orders as $order){
+
+    if($from != "" && $to !=""){
+
+      if($order['created_at'] >= $from && $order['created_at'] <= $to){
+
+        $myOrders[] = $order;
+        $myOrdersTotalPrice[] = $order["total_price"];
+        $myOrdersTotalCost[] = $order['total_price_usd'];
+
+        $paidOrder[] = $order;
+        $date = strtotime($order['created_at']);
+        array_push($earnings, array("x" => intval($date*1000), "y" => floatval($order['total_price'])));
+
+      }
+
+    }
+
+  }
+
+  if(isset($myOrders)){
+
+    foreach($myOrders as $myOrder){
+
+      if($myOrder['financial_status'] == "paid" && $myOrder['fulfillment_status'] == ""){
+
+        $toOrder[] = $myOrder;
+
+      }
+
+    }
+
+  }
+
+  foreach ($orders as $order){
+
+    if($from != "" && $to !=""){
+
+      if($order['created_at'] >= $from && $order['created_at'] <= $to){
+
+        $date = strtotime($order['created_at']);
+        array_push($earnings2, array("x" => intval($date*1000), "y" => floatval($order['total_price_usd'])));
+
+      }
+
+    }
+
+  }
+
+  if(isset($_POST['logout'])){
+
+      session_destroy();
+      header("Location: ../users_login.php");
+
+  }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/owl/owl.theme.default.min.css?v=1.1">
-    <link rel="stylesheet" href="./css/owl/owl.carousel.min.css?v=1.1">
-    <link rel="stylesheet" href="css/skin.css?v=1.1">
-    <link rel="stylesheet" href="css/chart.css?v=1.1">
-    <link rel="stylesheet" href="css/styles.css?v=1.1">
-    <link rel="stylesheet" href="./css/style.css?v=1.1">
+    <link rel="stylesheet" href="css/style.css?v=1.1" />
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <link rel="stylesheet" href="css/skin.css" />
+    <link rel="stylesheet" href="css/owl/owl.carousel.min.css" />
+    <link rel="stylesheet" href="css/owl/owl.theme.default.min.css" />
     <script src="js/owl.carousel.js"></script>
     <script src="js/owl.navigation.js"></script>
-    <script src="js/canvasjs.min.js"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-      crossorigin="anonymous"
-    />
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="js/canvasjs.min.js"></script>
+    <script type="text/javascript" src="js/utlis.js"></script>  
     <title>Dashboard</title>
+  
   </head>
 
   <body>
-  <div id="app">
-    <div id="clickripple-merchants" class="clickripple-merchants">
-      <div class="page-layout explore">
-        <div class="page-layout_nav">
-          <div class="main-wrapper">
-            <nav class="wrapper">
-              <div class="nav">
-                <div class="logo">
-                  <a href="#">
-                      <img style="max-width:100px;height:100px" src="image/logo.png" alt="clickripple" />
+    <div id="app">
+      <div id="clickripple-merchants" class="clickripple-merchants">
+        <div class="page-layout dashboard">
+          <div class="page-layout_nav">
+            <div class="main-wrapper">
+              <nav class="wrapper">
+                <div class="nav">
+                  <div class="logo">
+                    <a href="#">
+                      <img src="image/logo.png" alt="clickripple" />
                     </a>
+                    <form method="POST"> <input type="submit" value="Logout" name="logout"></form>
                   </div>
                   <div class="scroll">
                     <ul class="pages">
                       <li class="nav-item">
-                        <a href="./user_index.php">
+                        <a href="./totalSale.php">
                           <span class="nav-item_icon">
                             <svg class="icon-base">
                               <use xlink:href="#icon-sidebar-home">
@@ -59,6 +170,7 @@
                               </use>
                             </svg>
                           </span>
+                          
                           <span class="nav-item_title">Home</span>
                         </a>
                       </li>
@@ -165,7 +277,7 @@
                               </use>
                             </svg>
                           </span>
-                          <span class="nav-item_title">Find Products</span>
+                          <span class="nav-item_title">Products</span>
                         </a>
                       </li>
                       <div class="sources_items"></div>
@@ -310,11 +422,16 @@
                               class="double-date-picker_toggle btn btn-basic btn-regular btn-dropdown"
                               type="button"
                             >
-                              <span class="btn-title"
-                                >Jan 16,2021 - Feb 15,2021</span
-                              >
+                               &nbsp;
+                              <form method="post">
+                              From : 
+                                <input type="date" name="from"><br/><br/>
+                              To  : 
+                              <input type="date" name="to"><br/><br/>
+                              <input type="submit" value="Show Records" name="showRecords"/>
+                            </form>
                               <span class="btn-icon-wrap">
-                                <svg class="icon-base">
+                                
                                   <use xlink:href="#icon-small-arrow-down">
                                     <symbol
                                       id="icon-small-arrow-down"
@@ -573,7 +690,7 @@
                       </div>
                       <a
                         class="panel btn-notification dashboard_notifications"
-                        href="#"
+                        href="order.php"
                       >
                         <svg
                           class="btn-notification_icon icon-base icon-orders"
@@ -591,6 +708,15 @@
                           </use>
                         </svg>
                         <span class="btn-notification_title">To Order</span>
+                        <?php
+                        
+                          if(isset($toOrder)){
+                            echo sizeof($toOrder);
+                          }else{
+                            echo 0;
+                          }
+
+                        ?>
                         <svg
                           class="btn-notification_arrow icon-full-arrow-right icon-base"
                         >
@@ -668,39 +794,83 @@
                         </svg>
                       </a>
 
+                      
+                        
+                        <script>
+                        window.onload = function () {
+ 
+                          var chart = new CanvasJS.Chart("chartContainer", {
+                            animationEnabled: true,
+                            title:{
+                              text: "My Orders"
+                            },
+                            subtitles: [{
+                              text: "EARNINGS VS COST",
+                              fontSize: 18
+                            }],
+                            axisX:{
+                              interval: 3,
+                              intervalType: "date",
+                            },
+                            axisY: {
+                              prefix: "$"
+                            },
+                            legend:{
+                              cursor: "pointer",
+                              itemclick: toggleDataSeries
+                            },
+                            toolTip: {
+                              shared: true
+                            }, 
+                            dataPointMaxWidth: 20,
+                            data: [
+                            {
+                              type: "splineArea",
+                              name: "Sold For",
+                              showInLegend: "true",
+                              xValueType: "dateTime",
+                              xValueFormatString: "MMM YYYY",
+                              yValueFormatString: "$#,##0.##",
+                              dataPoints: <?php echo json_encode($earnings); ?>
+                            },
+                            {
+                              type: "splineArea",
+                              name: "Base Price",
+                              showInLegend: "true",
+                              xValueType: "dateTime",
+                              xValueFormatString: "MMM YYYY",
+                              yValueFormatString: "$#,##0.##",
+                              dataPoints: <?php echo json_encode($earnings2); ?>
+                            }
+                            ]
+                            });
+                                                  
+                                                  chart.render();
+                          
+                                                  function toggleDataSeries(e){
+                                                    if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                                                      e.dataSeries.visible = false;
+                                                    }
+                                                    else{
+                                                      e.dataSeries.visible = true;
+                                                    }
+                                                    chart.render();
+                                                  }
+                                                  
+                                                  }
+                      </script>
                       <div class="dashboard_chart">
                         <div class="panel dashboard-chart">
-                          <div class="panel-body">
-                            <div class="dashboard-chart-empty">
-                              <div class="dashboard-chart_legend">
-                                <div class="dashboard-chart_legend-line">
-                                  <div class="first-legend"></div>
-                                  Sales
-                                </div>
-                                <div class="dashboard-chart_legend-line">
-                                  <div class="second-legend"></div>
-                                  Costs
-                                </div>
-                              </div>
-                              <canvas
-                                id="canvas"
-                                class="chartjs-render-monitor"
-                                width="860"
-                                height="318"
-                                style="
-                                  display: block;
-                                  height: 255px;
-                                  width: 688px;
-                                "
-                              ></canvas>
-                            </div>
-                            <div class="dashboard-chart_message">
-                              There are no sales during selected period.
-                            </div>
+                          <div id="chartContainer" style="height: 370px; width: 100%;">
+                          
                           </div>
-                        </div>
-                      </div>
-                      <div class="dashboard_metrics">
+                          <?php if(!isset($myOrders) || sizeof($myOrders) == 0){
+                            ?>
+                              <h2>No Orders To Display During this Time Period</h2>
+                            <?php
+                          }?>
+                               
+                          <div class="dashboard_metrics">
                         <div class="panel dashboard-metrics">
                           <div class="panel-header container-flex flex-between">
                             <h3>Overview</h3>
@@ -724,46 +894,82 @@
                                 </use>
                               </svg>
                             </div>
-                            <div
-                              class="tooltip"
-                              role="tooltip"
-                              aria-hidden="true"
-                              x-placement="top"
-                              style="
-                                position: absolute;
-                                will-change: transform;
-                                visibility: hidden;
-                                top: 0px;
-                                left: 0px;
-                                transform: translate3d(234px -20px 0px);
-                              "
-                            >
-                              <div
-                                class="tooltip-arrow"
-                                style="left: 80px"
-                              ></div>
-                              <div class="tooltip-inner">
-                                Dashboard reporting setting
-                              </div>
-                            </div>
+                            
                           </div>
-                          <div class="dashboard-metrics_empty">
-                            Metrics Data is Empty
+                          <div class="orders-overview">
+                              <p><strong>Sales</strong>&nbsp;&nbsp;&nbsp;<?php
+                              
+                                if(isset($myOrdersTotalPrice)){
+
+                                  echo array_sum($myOrdersTotalPrice);
+
+                                }
+                              
+                              ?></p>
+                              <p><strong>Orders</strong>&nbsp;&nbsp;&nbsp;<?php
+                              if(isset($myOrders)){
+                                echo sizeof($myOrders);
+                              }else{
+                                echo 0;
+                              }
+                              ?></p>
+                              <hr>
+                              <p><strong>Cost</strong>&nbsp;&nbsp;&nbsp;<?php
+                              
+                              if(isset($myOrdersTotalPrice)){
+
+                                echo array_sum($myOrdersTotalCost);
+
+                              }
+                            
+                            ?></p>
+                              <hr>
+                              <p><strong>Earnings</strong>&nbsp;&nbsp;&nbsp;<?php
+                              
+                              if(isset($myOrdersTotalPrice)){
+
+                                $totalPrice = array_sum($myOrdersTotalPrice);
+                                $totalCost = array_sum($myOrdersTotalCost);
+                                echo $totalPrice-$totalCost;
+
+                              }
+                            
+                            ?></p>
                           </div>
                         </div>
+                      </div>
                       </div>
                       <div class="dashboard_top-products">
                         <div class="panel dashboard-table">
                           <div class="panel-header">
                             <h3>
-                              <span>Top Items</span>
+                              <span>Top Items</span><br>
+                              <?php
+                                $counter = 1;
+                                if(isset($myOrders)){
+
+                                  foreach($myOrders as $myOrder){
+                                    //print_r($myOrder);
+                                    ?>
+                                      <p><?php echo $counter.".  ";?>
+                                        <?php print_r($myOrder['line_items'][0]['title'])?>
+                                        <strong><?php echo $myOrder['total_price']?></strong>
+                                        Created On : <?php 
+                                        $dateOld = $myOrder['created_at'];
+                                        $dateNew = date_create($dateOld);
+                                        echo date_format($dateNew, 'l, F d y h:i:s');
+                                        ?>
+                                      </p>
+                                      <?php $counter = $counter+1?>
+                                    <?php
+                                  }
+
+                                }
+                              
+                              ?>
                             </h3>
                           </div>
-                          <div class="dashboard-table_body">
-                            <div class="dashboard-table_empty">
-                              No items sold
-                            </div>
-                          </div>
+                          
                         </div>
                       </div>
                     </div>
@@ -776,65 +982,7 @@
       </div>
     </div>
   </body>
-  <script>
-    /* window.onload = function () {
-      var chart = new CanvasJS.Chart("#chartContainer", {
-        animationEnabled: true,
-        exportEnabled: true,
-        theme: "light1", // "light1", "light2", "dark1", "dark2"
-        title: {
-          text: "Simple Column Chart with Index Labels",
-        },
-        axisY: {
-          includeZero: true,
-        },
-        data: [
-          {
-            type: "column", //change type to bar, line, area, pie, etc
-            //indexLabel: "{y}", //Shows y value on all Data Points
-            indexLabelFontColor: "#5A5757",
-            indexLabelFontSize: 16,
-            indexLabelPlacement: "outside",
-            dataPoints: [
-              { x: 10, y: 71 },
-              { x: 20, y: 55 },
-              { x: 30, y: 50 },
-              { x: 40, y: 65 },
-              { x: 50, y: 92, indexLabel: "\u2605 Highest" },
-              { x: 60, y: 68 },
-              { x: 70, y: 38 },
-              { x: 80, y: 71 },
-              { x: 90, y: 54 },
-              { x: 100, y: 60 },
-              { x: 110, y: 36 },
-              { x: 120, y: 49 },
-              { x: 130, y: 21, indexLabel: "\u2691 Lowest" },
-            ],
-          },
-        ],
-      });
-      chart.render();
-    };*/
-    var label1 = [1, 2, 3, 4, 5];
-    var data1 = [2.5, 3.5, 4.5, 6.5, 5.5];
-
-    let chartView = document.getElementById("chartContainer").getContext("2d");
-    let chartConat = new chart(chartView, {
-      type: "bar",
-      data: {
-        labels: label1,
-        datasets: [
-          {
-            data: data1,
-          },
-        ],
-      },
-      options: {
-        title: {
-          text: "do ckmmc",
-          display: true,
-        },
-      },
-    });
-  </script>
 </html>
+
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>  

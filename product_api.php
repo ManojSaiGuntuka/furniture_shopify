@@ -16,7 +16,7 @@ if(mysql_num_rows($result) < 1) {
 $row = mysqli_fetch_assoc($result);
 $store_url = $shopify['shop'];
 $token = $shop_row['access_token'];
-echo store_url '<br>';
-echo token '<br>';
+echo $store_url.'<br>';
+echo $token.'<br>';
 }
  ?>

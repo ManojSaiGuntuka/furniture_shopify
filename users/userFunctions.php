@@ -187,6 +187,27 @@ require_once('../DB.php');
 
         }
 
+        function getFullOrders(){
+
+            $url = "https://43c249091a227bea5ca0733355a3b05d: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@clickrippleappfurniture.myshopify.com/admin/orders.json";
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_VERBOSE, 0);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            $response['data'] = curl_exec ($curl);
+            if(curl_errno($curl))
+            {
+                $response['error'] = 'Curl error: ' . curl_error($curl);
+            }
+            curl_close ($curl);		
+            return $response;
+
+        }
+
         function cancelOrder($orderId, $cancellationReason, $refundAmount){
 
             $url = "https://43c249091a227bea5ca0733355a3b05d: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@clickrippleappfurniture.myshopify.com/admin/orders/$orderId/cancel.json";
@@ -194,6 +215,7 @@ require_once('../DB.php');
             $cancelProduct = array();
 
             $cancelProduct= [
+                "reason" => $cancellationReason,
                 "amount" => $refundAmount,
                 "currency" => "CAD"
             ];
@@ -213,6 +235,29 @@ require_once('../DB.php');
             }
             curl_close ($curl);		
             return $response;
+
+        }
+
+        function deleteOrder($orderId){
+
+            $url = "https://43c249091a227bea5ca0733355a3b05d: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@clickrippleappfurniture.myshopify.com/admin/orders/$orderId.json";
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_VERBOSE, 0);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+            //curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($cancelProduct));
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            $response['data'] = curl_exec ($curl);
+            if(curl_errno($curl))
+            {
+                $response['error'] = 'Curl error: ' . curl_error($curl);
+            }
+            curl_close ($curl);		
+            
+            header("Refresh:0");
 
         }
 

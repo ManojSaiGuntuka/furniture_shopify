@@ -58,7 +58,8 @@ class Shopify {
 	// Responsible for creating products through shopify api
 	private function createProductsShopify($data) {
 			
-    		$product = [];
+			$product = [];
+			$proift = $_GET['profit'];
     		$product['product'] = [
             'title'=> $data['productName'],
             'body_html'=>$data['Description'],
@@ -69,7 +70,8 @@ class Shopify {
             'available' => $data['available'],
             'variants'=> [
                 [
-                    'price'=> $data['productPrice'],
+					'price'=> $data['productPrice'],
+					'cost' => $data['productPrice'] - $proift,
                     'available' => $data['available'],
                     'fulfillment_service' => $data['inventory_management'],
                     'inventory_policy ' =>'continue',

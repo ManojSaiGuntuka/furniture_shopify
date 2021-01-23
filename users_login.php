@@ -1,4 +1,4 @@
-<?php include "inc/connect.php"; ?>
+<?php include "inc/connect.php"; include "./users/userFuncWithoutSession.php";?>
 <?php session_start(); ?>
 <?php
 
@@ -30,7 +30,12 @@ if(isset($_POST['login'])){
       $_SESSION['username'] = $db_username;
       $_SESSION['user_id'] = $db_id;
         
-      header("Location: ./users/user_index.php");
+      $WF = new FunctionsWithoutSession();
+      if(sizeOf($WF->hasUserProducts($db_id)) > 0){
+        header("Location: ./users/totalSale.php");
+      }else{
+        header("Location: ./users/user_index.php");
+      }
 
         }
     else {

@@ -1,6 +1,6 @@
 <?php
 
-   include "./userFunctions.php";
+   include "./userFunctions.php"; include "./userFuncWithoutSession.php";
 
    $UF = new UserFunctions();
 
@@ -40,7 +40,16 @@
                            <div class="scroll">
                               <ul class="pages">
                                  <li class="nav-item">
-                                    <a href="user_index.php">
+                                    <a href="<?php
+                      
+                                    $WF = new FunctionsWithoutSession();
+                                    if(sizeOf($WF->hasUserProducts($UF->getUserId())) > 0){
+                                       echo "totalSale.php";
+                                       }else{
+                                       echo "user_index.php";
+                                       }
+                                 
+                                 ?>">
                                        <span class="nav-item_icon">
                                           <svg class="icon-base">
                                              <use xlink:href="#icon-sidebar-home">
