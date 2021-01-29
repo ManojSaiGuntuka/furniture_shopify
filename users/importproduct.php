@@ -4,6 +4,11 @@
    $UF = new UserFunctions();
    $shipping_charge =50;
    $watchListData = $UF->getWatchListProducts();
+
+   $collectionsJson = $UF->getCollections();
+
+   $collectionsPhp = json_decode($collectionsJson[0], true);
+   $collections = $collectionsPhp['custom_collections'];
    
     if(isset($_POST['import_to_store'])){
    
@@ -17,9 +22,10 @@
          $watchListId = $_POST['import_to_store'];
          $productColor = $_POST['productColor'];
          $profit = $_POST['profit_input'];
+         $stock = $_POST['stock'];
          $cur_pro_id = $_POST['item_id'];
    
-      $addedToStore = $UF->addToStore($product_name, $desc, $productImage,$productColor, $newPrice, $watchListId, $cur_pro_id, $profit);
+      $addedToStore = $UF->addToStore($product_name, $desc, $productImage,$productColor, $newPrice, $watchListId, $cur_pro_id, $profit, $stock);
    
       if($addedToStore === false){
          print($addedToStore);
@@ -33,7 +39,7 @@
    }
    
    
-   }
+}
    
    if(isset($_POST['deleteFromWishList'])){
    
@@ -43,6 +49,13 @@
    
    $UF->deleteWatchList($watch_list_id);
    header("Refresh:0");
+   }
+
+   if(isset($_POST['connectStore'])){
+
+      $storeName = $_POST['connectStoreName'];
+      $UF->isStoreExist($storeName);
+
    }
    
    ?>
@@ -64,6 +77,17 @@
       <script src="js/jquery.min.js"></script>
       <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
       <script>tinymce.init({selector:'textarea', height : "480"});</script>
+
+      <style>
+      
+         .myForm{
+
+            display: none;
+
+         }
+
+      </style>
+
       <title>Import List</title>
    </head>
    <body>
@@ -313,6 +337,7 @@
                            <!---->
                            <!---->
                         </div>
+                        
                         <div class="import-list-content">
                            <div class="o-banner o-banner-danger">
                               <svg class="o-banner_icon-circle">
@@ -323,24 +348,39 @@
                                     </symbol>
                                  </use>
                               </svg>
+                              <?php 
+                                       
+                                    if($UF->isStore($UF->getUserId()) == "false"){
+
+                                       ?>
                               <div class="o-banner_content">
                                  <div class="o-banner_content-wrapper">
                                     <!----->
                                     <div class="o-banner_content-body">
                                        Import to store action will be enabled when a store is assigned.
+                                       
                                     </div>
                                  </div>
                                  <div class="o-banner_content-actions">
                                     <div class="action-btn">
-                                       <button class="btn btn-basic btn-sm" type="button">
+                                       <button class="btn btn-basic btn-sm" onclick="openForm" type="button">
                                           <!---->
                                           <!---->
-                                          <span class="btn-title">Connect a store</span>
+                                          <form method = "POST" class="form-container">
+                                        <h1>Connect Store </h1>
+                                   
+                                             <label for="charges"><b>ENTER THE NAME YOUR STORE : </b></label>
+                                             <input type="text" name="connectStoreName" required>
+                                                
+                                             <input type="submit" name="connectStore" class="btn" value="Connect Store">
+                                                
+                                          </form>
                                           <!---->
                                        </button>
                                     </div>
                                  </div>
                               </div>
+                              <?php }?>
                            </div>
                            <div class="panel import-list-filter">
                               <form class="import-list-filter_form" method="GET">
@@ -515,20 +555,16 @@
                                                       <div class="row">
                                                          <div class="col-xs-12 product-meta-wrapper -margin-bottom-xs">
                                                             <div class="supplier-info">
-                                                               <span>
-                                                                  <!----->
-                                                                  <span class="supplier-info_name-prefix">by</span>
-                                                                  <a class="supplier-info_name-link" href="#">
-                                                                  <span class="supplier-info_name">Homeware Store (ClickRipple)</span>
-                                                                  </a>
-                                                               </span>
+                                                               
                                                                <!---->
                                                             </div>
                                                          </div>
                                                       </div>
+                                                      <input type="hidden" name="stock" value=<?php echo $watchListData[$index]['Stock'];?>>
                                                       <div class="">
                                                          <div class="input-block product-main-tab_title-input" label="Change title" placeholder="Change title" maxlength="225" value="" >
                                                             <div class="input-field input-field-has-label" placeholder="Change title" maxlength="225">
+                                                               
                                                                <input name="change_title" value="<?php print_r($watchListData[$index]['productName']);?>" maxlength="255" id="input-block-cdb45960-3e70-11eb-ae62-d1bc52611a4c" type="text" class="form-control"> <!----> <!----> 
                                                                <label class="label-control" for="input-block">Change title</label>
                                                             </div>
@@ -546,7 +582,14 @@
                                                                            </div>
                                                                         </div>
                                                                      </div>
-                                                                     <span class="multiselect_placeholder">Choose collections</span>
+                                                                     Choose Collection
+                                                                     <select class="multiselect_placeholder" value="collection">
+
+                                                                        <?php foreach($collections as $collection){?>
+                                                                           <option value="<?php echo $collection['title']?>">&nbsp;&nbsp;<?php echo $collection['title']?></option>
+                                                                        <?php }?>
+
+                                                                     </select>
                                                                   </div>
                                                                </div>
                                                             </div>
@@ -966,9 +1009,18 @@
                                                 </div>
                                              </div>
                                           </div>
+                                          <?php
+
+                                          if($UF->isStore($UF->getUserId()) != "false"){
+
+                                          ?>
+
                                           <button type="submit" name="import_to_store" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" >
-                                          Import To Store
+                                             Import To Store
                                           </button>
+
+                                          <?php } ?>
+
                                           <button type="submit" name="deleteFromWishList" class="push-to-shop btn btn-primary btn-regular" value="<?php echo $watchListData[$index]['watchListId']?>" />
                                           Delete From Watchlist
                                           </button>
@@ -1025,7 +1077,23 @@
 
                  $(this).closest('tr').find(customProfit).val((profit).toFixed(2));
              });
+
          });
       </script>
+      <script>
+
+         function openForm() {
+            
+            document.getElementById("form-popup").style.display = "block";
+            
+         }
+
+         function closeForm() {
+
+            document.getElementById("myForm").style.display = "none";
+
+         }
+
+</script>
    </body>
 </html>

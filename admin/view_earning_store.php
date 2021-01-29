@@ -146,7 +146,7 @@ th, td{
 <div id="wrapper">
     <?php  include "includes/admin_navigation.php" ?>
     <div id="page-wrapper">
-        <h3 class="page-header">Admin Earning Report</h3>
+        <h3 class="page-header">Admin Earning Report By Store</h3>
         <div class="container-fluid">
 
             <div class="order-dashboard">

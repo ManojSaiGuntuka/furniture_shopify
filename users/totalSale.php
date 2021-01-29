@@ -7,7 +7,10 @@
 
   $data = $UF->getFullOrders();
 
-  $json = json_decode($data['data'], 1);
+  //$costs = $UF->getCosts();
+  //print_r($data['response']);
+
+  $json = json_decode($data['response'], 1);
 
   $orders = $json['orders'];
 
@@ -34,7 +37,7 @@
 
       $myOrders[] = $order;
       $myOrdersTotalPrice[] = $order["total_price"];
-      $myOrdersTotalCost[] = $order['total_price_usd'];
+      //$myOrdersTotalCost[] = $order['total_price_usd'];
 
       $date = strtotime($order['created_at']);
       array_push($earnings, array("x" => intval($date*1000), "y" => floatval($order['total_price'])));
@@ -44,7 +47,18 @@
     foreach ($orders as $order){
   
         $date = strtotime($order['created_at']);
-        array_push($earnings2, array("x" => intval($date*1000), "y" => floatval($order['total_price_usd'])));
+        
+        if(sizeof($UF->getProfitForProduct($order['line_items'][0]['product_id'])) > 0){
+
+          $cost = $UF->getProfitForProduct($order['line_items'][0]['product_id'])[0]['cost'];
+
+        }else{
+
+          $cost = 0;
+
+        }
+        
+        array_push($earnings2, array("x" => intval($date*1000), "y" => floatval($order['total_price'] - $cost )));
   
       }
       
@@ -61,9 +75,9 @@
   foreach ($orders as $order){
 
     if($from != "" && $to !=""){
-
+      
       if($order['created_at'] >= $from && $order['created_at'] <= $to){
-
+        
         $myOrders[] = $order;
         $myOrdersTotalPrice[] = $order["total_price"];
         $myOrdersTotalCost[] = $order['total_price_usd'];
@@ -71,6 +85,31 @@
         $paidOrder[] = $order;
         $date = strtotime($order['created_at']);
         array_push($earnings, array("x" => intval($date*1000), "y" => floatval($order['total_price'])));
+
+      }
+
+    }
+
+  }
+
+  foreach ($orders as $order){
+
+    if($from != "" && $to !=""){
+      
+      if($order['created_at'] >= $from && $order['created_at'] <= $to){
+        $date = strtotime($order['created_at']);
+        
+        if(sizeof($UF->getProfitForProduct($order['line_items'][0]['product_id'])) > 0){
+
+          $cost = $UF->getProfitForProduct($order['line_items'][0]['product_id'])[0]['cost'];
+
+        }else{
+
+          $cost = 0;
+
+        }
+        
+        array_push($earnings2, array("x" => intval($date*1000), "y" => floatval($order['total_price'] - $cost )));
 
       }
 
@@ -92,7 +131,7 @@
 
   }
 
-  foreach ($orders as $order){
+  /*foreach ($orders as $order){
 
     if($from != "" && $to !=""){
 
@@ -105,7 +144,7 @@
 
     }
 
-  }
+  }*/
 
   if(isset($_POST['logout'])){
 
@@ -133,6 +172,16 @@
     <script type="text/javascript" src="js/utlis.js"></script>  
     <title>Dashboard</title>
   
+    <style>
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      th, td{
+          padding:10px;
+      }
+    </style>
+
   </head>
 
   <body>
@@ -731,7 +780,7 @@
                       </a>
                       <a
                         class="panel btn-notification dashboard_notifications"
-                        href="#"
+                        href="order.php"
                       >
                         <svg
                           class="btn-notification_icon icon-base icon-orders"
@@ -810,13 +859,14 @@
                             }],
                             axisX:{
                               interval: 3,
-                              intervalType: "date",
+                              intervalType: "month",
+                              valueFormatString: "####"
                             },
                             axisY: {
                               prefix: "$"
                             },
                             legend:{
-                              cursor: "pointer",
+                              cursor: "not-allowed",
                               itemclick: toggleDataSeries
                             },
                             toolTip: {
@@ -826,10 +876,11 @@
                             data: [
                             {
                               type: "splineArea",
+                              
                               name: "Sold For",
                               showInLegend: "true",
                               xValueType: "dateTime",
-                              xValueFormatString: "MMM YYYY",
+                              xValueFormatString: "D",
                               yValueFormatString: "$#,##0.##",
                               dataPoints: <?php echo json_encode($earnings); ?>
                             },
@@ -838,7 +889,7 @@
                               name: "Base Price",
                               showInLegend: "true",
                               xValueType: "dateTime",
-                              xValueFormatString: "MMM YYYY",
+                              xValueFormatString: "D",
                               yValueFormatString: "$#,##0.##",
                               dataPoints: <?php echo json_encode($earnings2); ?>
                             }
@@ -914,11 +965,11 @@
                               }
                               ?></p>
                               <hr>
-                              <p><strong>Cost</strong>&nbsp;&nbsp;&nbsp;<?php
+                              <p><strong>Base Price </strong>&nbsp;&nbsp;&nbsp;<?php
                               
                               if(isset($myOrdersTotalPrice)){
 
-                                echo array_sum($myOrdersTotalCost);
+                                //echo array_sum($myOrdersTotalCost);
 
                               }
                             
@@ -928,9 +979,9 @@
                               
                               if(isset($myOrdersTotalPrice)){
 
-                                $totalPrice = array_sum($myOrdersTotalPrice);
-                                $totalCost = array_sum($myOrdersTotalCost);
-                                echo $totalPrice-$totalCost;
+                                //$totalPrice = array_sum($myOrdersTotalPrice);
+                                //$totalCost = array_sum($myOrdersTotalCost);
+                                //echo $totalPrice-$totalCost;
 
                               }
                             
@@ -941,36 +992,63 @@
                       </div>
                       <div class="dashboard_top-products">
                         <div class="panel dashboard-table">
-                          <div class="panel-header">
-                            <h3>
-                              <span>Top Items</span><br>
+                              <table cellpadding=10>
+
+                              <tr>
+                              
+                                <th>Serial Number</th>
+                                <th>Product Id</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Cost</th>
+                                <th>Ordered On</th>
+                              
+                              </tr>
+
                               <?php
                                 $counter = 1;
                                 if(isset($myOrders)){
 
                                   foreach($myOrders as $myOrder){
-                                    //print_r($myOrder);
                                     ?>
-                                      <p><?php echo $counter.".  ";?>
-                                        <?php print_r($myOrder['line_items'][0]['title'])?>
-                                        <strong><?php echo $myOrder['total_price']?></strong>
-                                        Created On : <?php 
+                                    <tr>
+                                      <p>
+                                        <td><?php echo $counter.".  ";?></td>
+                                        <td><a href="https://clickrippleappfurniture.myshopify.com/admin/orders/<?php echo $myOrder['id']?>"><?php echo $myOrder['id']?></a></td>
+                                        <td><?php print_r($myOrder['line_items'][0]['title'])?></td>
+                                        <td><strong></strong><?php echo $myOrder['total_price']?></td>
+                                        <td><?php 
+                                        
+                                        $cost = $UF->getProfitForProduct($myOrder['line_items'][0]['product_id']);
+                                        if(sizeof($cost) > 0){
+
+                                          echo $myOrder['total_price'] - $cost[0]['cost'];
+
+                                        }else{
+
+                                          echo $myOrder['total_price'];
+
+                                        }
+                                        
+                                        ?></td>
+                                        <td><?php 
                                         $dateOld = $myOrder['created_at'];
                                         $dateNew = date_create($dateOld);
                                         echo date_format($dateNew, 'l, F d y h:i:s');
-                                        ?>
-                                      </p>
+                                        ?></td>
+                                      </p></a>
                                       <?php $counter = $counter+1?>
+                                      </tr>
                                     <?php
                                   }
 
                                 }
                               
                               ?>
-                            </h3>
+                              </table>
+                            
                           </div>
                           
-                        </div>
                       </div>
                     </div>
                   </div>

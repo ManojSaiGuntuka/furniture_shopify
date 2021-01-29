@@ -55,6 +55,22 @@
    </div>
 
    <div class= "form-group">
+      <label for= "retailer_address"> Retailer Store </label>
+      <input readonly value= "<?php
+      
+      $store = $AF->getCurStoreUser($_GET['retailer_id']);
+
+      if(sizeof($store) > 0){
+         $curStore = $store[0]['storeName'];
+         echo $curStore ;
+      }else{
+         echo "  ";
+      }
+
+      ?>"type="text" class= "form-control" name="retailer_address">
+   </div>
+
+   <div class= "form-group">
       <label for= "retailer_group"> Retailer Group : <?php echo $retailer_group?> <?php print_r($AF->getGroupCommission($retailer_group)['commission'])?></label>
         <br/>
       <label for="retailer_group">Change Retailer Group to : </label>

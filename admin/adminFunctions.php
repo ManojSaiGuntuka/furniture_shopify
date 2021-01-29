@@ -57,6 +57,14 @@
 
         }
 
+        function getCurStoreUser($curUser){
+
+            $getCurUserDataQuery = "select * from storeRetailer where user_id = '$curUser'";
+            $getAllStores = $this->getConnection()->query($getCurUserDataQuery);
+            return $getAllStores;
+
+        }
+
         function isEmailExist($email){
 
             $userNameQuery = "select * from admin where email = '$email'";

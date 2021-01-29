@@ -12,11 +12,9 @@ class Shopify {
 	// Initializing pdo instance & shopify api credentials 
 	private $db;
 
-	 private $api_key = "43c249091a227bea5ca0733355a3b05d";
-	 private $shared_secret = "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";
-	 private $store = "clickrippleappfurniture.myshopify.com";
-
-
+	private $api_key = "43c249091a227bea5ca0733355a3b05d";
+	private $shared_secret = "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";
+	private $store = "clickrippleappfurniture.myshopify.com";
 
 	function __construct(){		
 		$this->db = new DB('PRODUCTS');			

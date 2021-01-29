@@ -4,20 +4,50 @@
 <?php
 
 include "includes/admin_header.php";
+
 include "../users/userFunctions.php";
 
 $UF = new UserFunctions();
 ?>
 <?php
 
-$allOrdersData = $UF->getOrders();
 
-$json = json_decode($allOrdersData['data'], 1);
 
-$ordersStatus = $json['orders'];
+if(isset($_POST['getStore'])){
 
-$numOfFullFilled = 0;
-$numOfPending = 0;
+    $selectedStore = $_POST['currentStore'];
+
+    header("Location: view_all_orders.php?store=".$selectedStore);
+
+}
+
+if(isset($_GET['store'])){
+
+    $store = $_GET['store'];
+    $allOrdersData = $UF->getOrdersFromStore($store);
+    $orders = json_decode($allOrdersData, 1);
+    //print_r($orders);   
+    if( !isset($orders['errors']) ){
+    
+        $ordersStatus = $orders['orders'];
+
+    }
+    //print_r($allOrdersData);
+
+}else{
+
+    $allOrdersData = $UF->getOrders();
+
+    $json = json_decode($allOrdersData['data'], 1);
+
+    $ordersStatus = $json['orders'];
+
+}
+
+if(isset($ordersStatus)){
+
+    $numOfFullFilled = 0;
+    $numOfPending = 0;
 
 foreach ($ordersStatus as $rkey => $orderStatus){
 	if ($orderStatus['fulfillment_status'] == 'fulfilled'){
@@ -30,6 +60,22 @@ foreach ($ordersStatus as $rkey => $orderStatus){
 	}
 }
 
+foreach ($ordersStatus as $rkey => $orderStatus){
+
+	if ($orderStatus['fulfillment_status'] != 'fulfilled' && $orderStatus['financial_status'] == 'paid'){
+        $ordersToBeShip[] = $orderStatus;
+        $totalEarnings[] = $orderStatus['total_price'];
+	}
+	
+}
+
+
+}
+ if(!isset($_GET['store'])){
+
+    $_GET['store'] = "clickrippleappfurniture.myshopify.com";
+ }
+    
 
 if(isset($_POST['close'])){
 
@@ -38,8 +84,10 @@ if(isset($_POST['close'])){
 }
 
 if(isset($_POST['deleteOrder'])){
+    
+    $store = $_GET['store'];
 
-    $UF->deleteOrder($_POST['deleteOrder']);
+    $UF->deleteOrder($_POST['deleteOrder'], $store);
 
 }
 
@@ -81,25 +129,57 @@ $selectedStatus = array();
         if(isset($_POST['cancelOrder'])){
         
             $productId = $_GET['productId'];
+            $store = $_GET['store'];
             
             $cancellationReason = $_POST['cancellationReason'];
             $cancellationCharges = $_POST['cancellationCharges'];
 
             unset($_GET['productId']);
         
-            $UF->cancelOrder($productId, $cancellationReason, $cancellationCharges);
-            
-        
+            $cancel = $UF->cancelOrder($productId, $cancellationReason, $cancellationCharges, $store);
+            if($cancel){
+                header("Location: view_all_orders.php");
+            }
         }
         ?>
+        
             <div class="order-dashboard">
+            <br>
+            <form method="post">
+                            Select Store : 
+                            <select name="currentStore">
+                            
+                                <?php
+                                
+                                    $stores = $UF->viewAllStores();
+                                    foreach($stores as $store){
+                                        ?>
+                                        
+                                        <option value="<?php echo $store['store_url']?>"><?php echo $store['store_url']?></option>
+                                        
+                                        <?php
+                                    }
+                                
+                                ?>
+
+                            </select>
+                            <input type="submit" name="getStore" value="Select This Store">
+
+                        </form>
+
                         <div class="orderStatics">
+
                             <div class="title">
-                                <span class="orderTitle">Order Statistics</span>
+                                <span class="orderTitle">Order Statistics For This Store</span>
                             </div>
                             <div class="orderButton">
                                 <div class="orderbtn totalOrder">
-                                    <a href="view_all_orders.php?status=no" class="total">
+                                    <a href="view_all_orders.php?status=no&store=<?php if(isset($_GET['store'])){
+                                        echo $_GET['store'];
+                                        }else{
+                                            echo "clickrippleappfurniture.shopify.com";
+                                        }
+                                        ?>" class="total">
                                         <svg class="icon">
                                             <use xlink:href="#icon-cube">
                                                 <symbol id="icon-cube" viewBox="131 -131 512 512">
@@ -118,12 +198,23 @@ $selectedStatus = array();
                                         </svg>
                                         <div class="order-detail">
                                             <span class="orderTitle">Total Orders</span>
-                                            <span class="order-nos"><?php print(sizeOf($ordersStatus));?></span>
+                                            <span class="order-nos"><?php 
+                                            
+                                            if(isset($ordersStatus)){
+                                                print(sizeOf($ordersStatus));
+                                            }
+                                            
+                                            ?></span>
                                         </div>
                                     </a>
                                 </div>
                                 <div class="orderbtn processedOrder">
-                                    <a href="view_all_orders.php?status=pending" class="processed">
+                                    <a href="view_all_orders.php?status=pending&store=<?php if(isset($_GET['store'])){
+                                        echo $_GET['store'];
+                                        }else{
+                                            echo "clickrippleappfurniture.shopify.com";
+                                        }
+                                        ?>" class="processed">
                                         <svg class="icon">
                                             <use xlink:href="#icon-sqaure">
                                                 <symbol id="icon-sqaure" viewBox="0 0 1000 1000">
@@ -156,7 +247,12 @@ $selectedStatus = array();
                                     </a>
                                 </div>
                                 <div class="orderbtn cancelledOrder">
-                                    <a href="view_all_orders.php?status=cancelled" class="cancel">
+                                    <a href="view_all_orders.php?status=cancelled&store=<?php if(isset($_GET['store'])){
+                                        echo $_GET['store'];
+                                        }else{
+                                            echo "clickrippleappfurniture.shopify.com";
+                                        }
+                                        ?>" class="cancel">
                                         <svg class="icon">
                                             <use xlink:href="#icon-danger-circle">
                                                 <symbol id="icon-danger-circle" viewBox="0 0 20 20">
@@ -182,7 +278,12 @@ $selectedStatus = array();
                                     </a>
                                 </div>
                                 <div class="orderbtn completedOrder">
-                                    <a href="view_all_orders.php?status=fulfilled" class="completed">
+                                    <a href="view_all_orders.php?status=fulfilled&store=<?php if(isset($_GET['store'])){
+                                        echo $_GET['store'];
+                                        }else{
+                                            echo "clickrippleappfurniture.shopify.com";
+                                        }
+                                        ?>" class="completed">
                                         <svg class="icon">
                                             <use xlink:href="#icon-checkmark">
                                                 <symbol id="icon-checkmark" viewBox="0 0 26 26">
@@ -212,8 +313,131 @@ $selectedStatus = array();
                                         </div>
                                     </a>
                                 </div>
+                                <div class="orderbtn processedOrder">
+                                    <a href="view_all_orders.php?status=pending" class="processed">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-sqaure">
+                                                <symbol id="icon-sqaure" viewBox="0 0 1000 1000">
+                                                    <g>
+                                                        <g>
+                                                            <path
+                                                                    d="M745,193.8H71.3C37.4,193.8,10,221.2,10,255v673.8c0,33.8,27.4,61.3,61.3,61.3H745c33.8,0,
+                                        61.3-27.4,61.3-61.3V255C806.3,221.2,778.8,193.8,745,193.8z M745,898.1c0,17-13.7,30.6-30.6,30.6H101.9c-16.9
+                                        ,0-30.6-13.7-30.6-30.6V285.6c0-16.9,13.7-30.6,30.6-30.6h612.5c16.9,0,30.6,13.7,30.6,30.6V898.1z M928.8,
+                                        10H316.3C282.4,10,255,37.4,255,71.3v61.3h61.3v-30.6c0-16.9,13.7-30.6,30.6-30.6h551.3c16.9,0,30.6,13.7,30.6,
+                                        30.6v551.3c0,16.9-13.7,30.6-30.6,30.6h-30.6V745h61.3c33.8,0,61.3-27.4,61.3-61.3V71.3C990,37.4,962.6,10,928.8,10z"
+                                                            ></path>
+                                                        </g>
+                                                    </g>
+                                                </symbol>
+                                            </use>
+                                        </svg>
+                                        <div class="order-detail">
+                                            <span class="orderTitle">Total Retailers</span>
+                                            <span class="order-nos"><?php 
+                                            
+                                            print($UF->getNumOfRetailers());
+
+                                            ?></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="orderbtn processedOrder">
+                                    <a href="view_all_orders.php?status=pending" class="processed">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-sqaure">
+                                                <symbol id="icon-sqaure" viewBox="0 0 1000 1000">
+                                                    <g>
+                                                        <g>
+                                                            <path
+                                                                    d="M745,193.8H71.3C37.4,193.8,10,221.2,10,255v673.8c0,33.8,27.4,61.3,61.3,61.3H745c33.8,0,
+                                        61.3-27.4,61.3-61.3V255C806.3,221.2,778.8,193.8,745,193.8z M745,898.1c0,17-13.7,30.6-30.6,30.6H101.9c-16.9
+                                        ,0-30.6-13.7-30.6-30.6V285.6c0-16.9,13.7-30.6,30.6-30.6h612.5c16.9,0,30.6,13.7,30.6,30.6V898.1z M928.8,
+                                        10H316.3C282.4,10,255,37.4,255,71.3v61.3h61.3v-30.6c0-16.9,13.7-30.6,30.6-30.6h551.3c16.9,0,30.6,13.7,30.6,
+                                        30.6v551.3c0,16.9-13.7,30.6-30.6,30.6h-30.6V745h61.3c33.8,0,61.3-27.4,61.3-61.3V71.3C990,37.4,962.6,10,928.8,10z"
+                                                            ></path>
+                                                        </g>
+                                                    </g>
+                                                </symbol>
+                                            </use>
+                                        </svg>
+                                        <div class="order-detail">
+                                            <span class="orderTitle">Total Orders To Be Shipped</span>
+                                            <span class="order-nos"><?php 
+                                            
+                                            if(isset($ordersToBeShip)){
+                                                echo sizeof($ordersToBeShip);
+                                            }
+
+                                            ?></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="orderbtn processedOrder">
+                                    <a href="view_all_orders.php?status=pending" class="processed">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-sqaure">
+                                                <symbol id="icon-sqaure" viewBox="0 0 1000 1000">
+                                                    <g>
+                                                        <g>
+                                                            <path
+                                                                    d="M745,193.8H71.3C37.4,193.8,10,221.2,10,255v673.8c0,33.8,27.4,61.3,61.3,61.3H745c33.8,0,
+                                        61.3-27.4,61.3-61.3V255C806.3,221.2,778.8,193.8,745,193.8z M745,898.1c0,17-13.7,30.6-30.6,30.6H101.9c-16.9
+                                        ,0-30.6-13.7-30.6-30.6V285.6c0-16.9,13.7-30.6,30.6-30.6h612.5c16.9,0,30.6,13.7,30.6,30.6V898.1z M928.8,
+                                        10H316.3C282.4,10,255,37.4,255,71.3v61.3h61.3v-30.6c0-16.9,13.7-30.6,30.6-30.6h551.3c16.9,0,30.6,13.7,30.6,
+                                        30.6v551.3c0,16.9-13.7,30.6-30.6,30.6h-30.6V745h61.3c33.8,0,61.3-27.4,61.3-61.3V71.3C990,37.4,962.6,10,928.8,10z"
+                                                            ></path>
+                                                        </g>
+                                                    </g>
+                                                </symbol>
+                                            </use>
+                                        </svg>
+                                        <div class="order-detail">
+                                            <span class="orderTitle">Total Earnings</span>
+                                            <span class="order-nos"><?php 
+
+                                            if(isset($totalEarnings)){
+                                                print(array_sum($totalEarnings));
+                                            }
+
+                                            ?></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="orderbtn processedOrder">
+                                    <a href="view_all_products.php" class="processed">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-sqaure">
+                                                <symbol id="icon-sqaure" viewBox="0 0 1000 1000">
+                                                    <g>
+                                                        <g>
+                                                            <path
+                                                                    d="M745,193.8H71.3C37.4,193.8,10,221.2,10,255v673.8c0,33.8,27.4,61.3,61.3,61.3H745c33.8,0,
+                          61.3-27.4,61.3-61.3V255C806.3,221.2,778.8,193.8,745,193.8z M745,898.1c0,17-13.7,30.6-30.6,30.6H101.9c-16.9
+                          ,0-30.6-13.7-30.6-30.6V285.6c0-16.9,13.7-30.6,30.6-30.6h612.5c16.9,0,30.6,13.7,30.6,30.6V898.1z M928.8,
+                          10H316.3C282.4,10,255,37.4,255,71.3v61.3h61.3v-30.6c0-16.9,13.7-30.6,30.6-30.6h551.3c16.9,0,30.6,13.7,30.6,
+                          30.6v551.3c0,16.9-13.7,30.6-30.6,30.6h-30.6V745h61.3c33.8,0,61.3-27.4,61.3-61.3V71.3C990,37.4,962.6,10,928.8,10z"
+                                                            ></path>
+                                                        </g>
+                                                    </g>
+                                                </symbol>
+                                            </use>
+                                        </svg>
+                                        <div class="order-detail">
+                                            <span class="orderTitle">Total Products</span>
+                                            <span class="order-nos"><?php 
+                                            
+                                            print($UF->getNumOfProducts());
+
+                                            ?></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                
                             </div>
+                            
                         </div>
+                        
                         
                         <div class="form-popup" id="myForm">
                                     <form method = "POST" class="form-container">
@@ -247,7 +471,7 @@ $selectedStatus = array();
                                         </li>
 
                                     </ol>
-
+                                    <input type="text" name="hiddenStore" value="<?php echo $_GET['store']?>">
                                     <input type="submit" name="cancelOrder" class="btn" value="Cancel Order">
                                     <input type="submit" name="close" class="btn cancel" value="Close">
                                     
@@ -290,6 +514,9 @@ $selectedStatus = array();
                                 //                                echo "<td><a onClick = \"javascript: return confirm('Are you sure you want to cancel order?   '); \" href='view_all_orders.php?cancel={$order->id}'>Cancel Order</a></td>";
                                 //                                echo "</tr>";
                                 //                            }
+                                if(isset($ordersStatus)){
+
+                                
                                 foreach ($ordersStatus as $rkey => $orderStatus){
                                     if ($orderStatus['fulfillment_status'] == 'fulfilled'){
                                         $fulfilled[] = $orderStatus;
@@ -303,6 +530,7 @@ $selectedStatus = array();
                                         $cancelledOrders[] = $orderStatus;
                                     }
                                 }
+                            }
 
                                 if(isset($_GET['status']) && $_GET['status'] == "pending"){
                                     $selectedStatus = $pending;
@@ -342,7 +570,7 @@ $selectedStatus = array();
                                         
                                         ?></td>
                                         <?php if ($item['financial_status'] != 'refunded' && $item['financial_status'] != 'partially_refunded'){?>
-                                            <td class="cancelledbtn"><a class= "btn btn-primary"  href="./view_all_orders.php?productId=<?php echo $item['id']?>">Cancel Order</a></td>
+                                            <td class="cancelledbtn"><a class= "btn btn-primary"  href="./view_all_orders.php?productId=<?php echo $item['id']?>&store=<?php echo $_GET['store']?>">Cancel Order</a></td>
                                         <?php } else{?>
                                             <td class="cancelledbtn">Cannot Cancel a Refunded Order</td>
                                         <?php }?>
@@ -411,5 +639,6 @@ if(isset($_GET['productId'])){
 }?>
 </body>
 </html>
+
 
 

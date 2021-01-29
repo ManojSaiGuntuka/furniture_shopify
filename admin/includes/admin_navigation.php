@@ -67,7 +67,13 @@
                         <a href="./view_all_retailers.php"> <i class="fa fa-bitbucket"></i> &nbsp; Retailers  </i> </a>
                     </li>
                     <li>
-                        <a href="./view_all_earnings.php"> <i class="fa fa-user"></i> &nbsp; All Earnings  </i> </a>
+                        <a href="#"> <i class="fa fa-user"></i> &nbsp; Earnings  </i> </a>
+                        <ul>
+                        
+                            <li><a href="view_all_earnings.php"> <i class="fa fa-user"></i> &nbsp; All Earnings  </i> </a></li>
+                            <li><a href="view_earning_store.php"> <i class="fa fa-user"></i> &nbsp; Earnings By Store </i> </a></li>
+
+                        </ul>
                     </li>	
                     <li>
                         <a href="./edit_admin.php?editAdminId=<?php echo $_SESSION['adminId']?>"> <i class="fa fa-user"></i> &nbsp; General Settings  </i> </a>
