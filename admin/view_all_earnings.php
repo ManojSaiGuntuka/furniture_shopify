@@ -8,6 +8,8 @@ include "../users/userFunctions.php";
 
 $UF = new UserFunctions();
 
+$orders = $UF->getOrdersFromAllStores();
+
 if(isset($_GET['cancel'])){
     //$AF->deleteRetailer($_GET['delete']);
 }
@@ -101,11 +103,20 @@ if(isset($_GET['search']))
 
 }
 /*------------------------------------------------*/
-$allOrdersData = $UF->getOrderEarnings($created_min,$created_max,$store,$orderNumber,$paymentType, $store);
+//$allOrdersData = $UF->getOrderEarnings($created_min,$created_max,$store,$orderNumber,$paymentType, $store);
 //print_r($allOrdersData);
-$json = json_decode($allOrdersData['response'], 1);
 
-$ordersStatus = $json['orders'];
+
+foreach($orders as $order){
+
+    $json = json_decode($order, true);
+    $ordersStatus[] = $json['orders'];
+
+}
+
+
+
+//$ordersStatus = $json['orders'];
 //print_r($ordersStatus);
 //$selectedOrders = $ordersStatus;
 
@@ -121,10 +132,10 @@ $selectedOrders = array();
 
     if($store == ""){
         
-        $markUpAmount = $UF->getMarkup("clickrippleappfurniture.myshopify.com");
+        //$markUpAmount = $UF->getMarkup("clickrippleappfurniture.myshopify.com");
 
     }else{
-        $markUpAmount = $UF->getMarkup($store);
+        //$markUpAmount = $UF->getMarkup($store);
     }
 
 ?>
@@ -169,19 +180,7 @@ th, td{
                                 <div class="input-field my-products__filter-item my-products__filter-item--keywords col-sm-3"><input type="date" id="fromDate" name="fromDate" placeholder="From Date" class="form-control"></div>
                                 <div class="input-field my-products__filter-item my-products__filter-item--keywords col-sm-3"><input type="date" id="toDate" name="toDate" placeholder="To Date" class="form-control"></div>
                                 <div class="input-field my-products__filter-item col-sm-3">
-                                    <select id="selectStore" class="form-control" name="selectStore">
-                                    <option value="">Select Store</option>
-                                    <?php $stores = $UF->viewAllStores();
                                     
-                                        foreach($stores as $store){
-                                    
-                                    ?>
-                                            <option value="<?php echo $store['store_url']; ?>">
-                                                <?php echo $store['store_url']; ?>
-                                            </option>
-                                        <?php } ?>
-
-                                    </select>
                                 </div>
                                 <div class="input-field my-products__filter-item my-products__filter-item--keywords col-sm-3"><input id="orderNumber" name="orderNumber" type="text" placeholder="Order Number" class="form-control"></div>
                                 <div class="input-field my-products__filter-item col-sm-3" style="margin-top:20px;">
@@ -222,6 +221,7 @@ th, td{
                         <tr>
                             <th class="order-no">Order No#</th>
                             <th class="date-time">Order Date</th>
+                            <th class="order-store">Store Name</th>
                             <th class="user-name">Price</th>
                             <th class="store-name">Mark up Amount</th>
                             <th class="delivery">Shipping Paid</th>
@@ -233,8 +233,14 @@ th, td{
                         </thead>
                         <tbody class="order-table_tbody">
                         <?php
-                        foreach ($ordersStatus as $item){
+
+                        foreach ($ordersStatus as $items){   
                             
+                            foreach($items as $item){
+
+                                $markUpAmount = $UF->getMarkup($item['line_items'][0]['vendor']);
+                            
+                                
                             if(sizeof($UF->getProfitForProduct($item['line_items'][0]['product_id'])) > 0){
 
                                 $profit = $UF->getProfitForProduct($item['line_items'][0]['product_id'])[0]['cost'];
@@ -251,27 +257,26 @@ th, td{
                             <tr>
                                 <td><?php echo $item['id']; ?></td>
                                 <td><?php $date=date_create($item['created_at']); echo date_format($date,'j<\s\u\p>S</\s\u\p> F, Y H:i a');  //echo date_format($date,"d F, Y H:i a"); ?></td>
+                                <td><?php print_r($item['line_items'][0]['vendor']);?></td>
                                 <td><?php echo $item['total_price'] - $profit; ?></td>
                                 <td><?php 
                                     
                                     $cost = floatval($item['total_price'] - $profit);
-                                    $totalMarkup = floatval($item['total_price'] - $profit);
-                                    $markUp = floatval($item['total_price'] - $profit)/100;
-                                    print($item['total_price']*$markUp);
+                                    $cutAmount = floatval($cost * floatval(floatval($markUpAmount) / 100));
+                                    print(floatval($cost - $cutAmount));
 
                                 ?></td>
                                 <td>50 CAD<?php //echo $item['total_shipping_price_set']['shop_money']['amount']; ?></td>
                                 <td><?php if(isset($item['refunds'][0]['transactions'][0]['amount'])){echo $item['refunds'][0]['transactions'][0]['amount']." ".$item['refunds'][0]['transactions'][0]['currency'];} ?></td>
                                 <td><?php 
-                                    //$markUp = floatval($markUpAmount)/100;
                                     
-                                    $earning = ($item['total_price'] - $profit)*$markUp;
+                                    $earning = ($item['total_price'] - $profit)*floatval($markUpAmount)/100;
                                     print($earning); ?></td>
 
                                 <td><?php echo $item['financial_status']; ?></td>
                                 <td><?php if(isset($item['payment_gateway_names'][0])){ echo $item['payment_gateway_names'][0]; } ?></td>
                             </tr>
-                        <?php } ?>
+                        <?php }} ?>
                         </tbody>
                     </table>
                     <?php if(isset($msg)){ echo $msg; } ?>

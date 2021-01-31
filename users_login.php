@@ -24,7 +24,8 @@ if(isset($_POST['login'])){
   $db_user_password = $row['user_password']; 
 
  $password = crypt($password, $db_user_password);
-
+print($db_user_password);
+print($user_password);
  if($username === $db_username && $user_password === $db_user_password){
  
       $_SESSION['username'] = $db_username;
@@ -42,7 +43,6 @@ if(isset($_POST['login'])){
         ?>
         <script>
             alert("Credentials are not correct")
-            location.reload()
         </script>
       <?php }
 

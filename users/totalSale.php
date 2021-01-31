@@ -37,7 +37,18 @@
 
       $myOrders[] = $order;
       $myOrdersTotalPrice[] = $order["total_price"];
-      //$myOrdersTotalCost[] = $order['total_price_usd'];
+      $cost = $UF->getProfitForProduct($order['line_items'][0]['product_id']);;
+      
+      if(sizeof($cost) > 0){
+
+        $newCost = $order['total_price'] - $cost[0]['cost'];
+
+      }else{
+
+        $newCost = $order['total_price'];
+
+      }
+      $myOrdersTotalCost[] = $newCost;
 
       $date = strtotime($order['created_at']);
       array_push($earnings, array("x" => intval($date*1000), "y" => floatval($order['total_price'])));
@@ -80,7 +91,18 @@
         
         $myOrders[] = $order;
         $myOrdersTotalPrice[] = $order["total_price"];
-        $myOrdersTotalCost[] = $order['total_price_usd'];
+        $cost = $UF->getProfitForProduct($order['line_items'][0]['product_id']);;
+      
+        if(sizeof($cost) > 0){
+
+        $newCost = $order['total_price'] - $cost[0]['cost'];
+
+        }else{
+
+          $newCost = $order['total_price'];
+
+        }
+        $myOrdersTotalCost[] = $newCost;
 
         $paidOrder[] = $order;
         $date = strtotime($order['created_at']);
@@ -857,11 +879,7 @@
                               text: "EARNINGS VS COST",
                               fontSize: 18
                             }],
-                            axisX:{
-                              interval: 3,
-                              intervalType: "month",
-                              valueFormatString: "####"
-                            },
+                            
                             axisY: {
                               prefix: "$"
                             },
@@ -880,7 +898,7 @@
                               name: "Sold For",
                               showInLegend: "true",
                               xValueType: "dateTime",
-                              xValueFormatString: "D",
+                              xValueFormatString: "MMM YYYY",
                               yValueFormatString: "$#,##0.##",
                               dataPoints: <?php echo json_encode($earnings); ?>
                             },
@@ -889,7 +907,7 @@
                               name: "Base Price",
                               showInLegend: "true",
                               xValueType: "dateTime",
-                              xValueFormatString: "D",
+                              xValueFormatString: "DD MMM YYYY",
                               yValueFormatString: "$#,##0.##",
                               dataPoints: <?php echo json_encode($earnings2); ?>
                             }
@@ -952,7 +970,7 @@
                               
                                 if(isset($myOrdersTotalPrice)){
 
-                                  echo array_sum($myOrdersTotalPrice);
+                                  echo "$".array_sum($myOrdersTotalPrice);
 
                                 }
                               
@@ -969,7 +987,7 @@
                               
                               if(isset($myOrdersTotalPrice)){
 
-                                //echo array_sum($myOrdersTotalCost);
+                                echo "$".array_sum($myOrdersTotalCost);
 
                               }
                             
@@ -977,11 +995,11 @@
                               <hr>
                               <p><strong>Earnings</strong>&nbsp;&nbsp;&nbsp;<?php
                               
-                              if(isset($myOrdersTotalPrice)){
+                              if(isset($myOrdersTotalPrice) && isset($myOrdersTotalCost)){
 
-                                //$totalPrice = array_sum($myOrdersTotalPrice);
-                                //$totalCost = array_sum($myOrdersTotalCost);
-                                //echo $totalPrice-$totalCost;
+                                $totalPrice = array_sum($myOrdersTotalPrice);
+                                $totalCost = array_sum($myOrdersTotalCost);
+                                echo "$".floatval($totalPrice-$totalCost);
 
                               }
                             

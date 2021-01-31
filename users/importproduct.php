@@ -24,8 +24,9 @@
          $profit = $_POST['profit_input'];
          $stock = $_POST['stock'];
          $cur_pro_id = $_POST['item_id'];
-   
-      $addedToStore = $UF->addToStore($product_name, $desc, $productImage,$productColor, $newPrice, $watchListId, $cur_pro_id, $profit, $stock);
+         $collectionId = $_POST['collection'];
+
+      $addedToStore = $UF->addToStore($product_name, $desc, $productImage,$productColor, $newPrice, $watchListId, $cur_pro_id, $profit, $stock, $collectionId);
    
       if($addedToStore === false){
          print($addedToStore);
@@ -383,13 +384,13 @@
                               <?php }?>
                            </div>
                            <div class="panel import-list-filter">
-                              <form class="import-list-filter_form" method="GET">
+                              <!--<form class="import-list-filter_form" method="GET">
                                  <div class="import-list-filter_input">
                                     <div class="input-block import-list-filter_title-input" label="Enter Keywords" placeholder="Enter Keywords" name="filter[keywords]" value="">
                                        <div class="input-field input-field-no-value input-field-has-label" placeholder="Enter Keywords" name="filter[keywords]">
-                                          <!---->
+                                          
                                           <input id="input-block" class="form-control" placeholder="Enter Keywords" name="filter[keywords]" type="text"/>
-                                          <!---->
+                                          
                                           <label class="label-control" for="input-block">
                                           Enter Keywords
                                           </label>
@@ -398,13 +399,12 @@
                                  </div>
                                  <div class="import-list-filter_button">
                                     <button class="btn btn-basic btn-lg" type="submit">
-                                       <!---->
-                                       <!---->
+                                       
                                        <span class="btn-title">Search</span>
-                                       <!---->
+                                       
                                     </button>
                                  </div>
-                              </form>
+                              </form>-->
                            </div>
                            <div class="bulk-actions import-list_bulk-actions">
                               <div class="bulk-actions-desktop">
@@ -583,17 +583,18 @@
                                                                         </div>
                                                                      </div>
                                                                      Choose Collection
-                                                                     <select class="multiselect_placeholder" value="collection">
+                                                                     <select class="multiselect_placeholder" name="collection" >
 
                                                                         <?php foreach($collections as $collection){?>
-                                                                           <option value="<?php echo $collection['title']?>">&nbsp;&nbsp;<?php echo $collection['title']?></option>
+                                                                           
+                                                                           <option value="<?php echo $collection['id']?>">&nbsp;&nbsp;<?php echo $collection['title']?></option>
                                                                         <?php }?>
 
                                                                      </select>
                                                                   </div>
                                                                </div>
                                                             </div>
-                                                            <div class="product-type-tags">
+                                                            <!--<div class="product-type-tags">
                                                                <div class="multiselect-type">
                                                                   <div class="multiselect" tabindex="-1" max-height="600">
                                                                      <div class="multiselect_select"></div>
@@ -626,7 +627,7 @@
                                                                      </div>
                                                                   </div>
                                                                </div>
-                                                            </div>
+                                                            </div>-->
                                                          </div>
                                                       </div>
                                                    </div>

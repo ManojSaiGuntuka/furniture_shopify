@@ -559,7 +559,7 @@
                                             <br/>
                                             <a
                                               class="btn btn-primary btn-regular btn-block btn-title" type="button"
-                                              href="./product_detail.php?pid=<?php echo $product['productId']?>">
+                                              href="./product_details.php?pid=<?php echo $product['productId']?>">
                                                View This Product</a>
                                               </form>
 

@@ -121,10 +121,10 @@ $selectedOrders = array();
 
     if($store == ""){
         
-        $markUpAmount = $UF->getMarkup("clickrippleappfurniture.myshopify.com");
+        //$markUpAmount = $UF->getMarkup("clickrippleappfurniture.myshopify.com");
 
     }else{
-        $markUpAmount = $UF->getMarkup($store);
+        //$markUpAmount = $UF->getMarkup($store);
     }
 
 ?>
@@ -252,21 +252,10 @@ th, td{
                                 <td><?php echo $item['id']; ?></td>
                                 <td><?php $date=date_create($item['created_at']); echo date_format($date,'j<\s\u\p>S</\s\u\p> F, Y H:i a');  //echo date_format($date,"d F, Y H:i a"); ?></td>
                                 <td><?php echo $item['total_price'] - $profit; ?></td>
-                                <td><?php 
-                                    
-                                    $cost = floatval($item['total_price'] - $profit);
-                                    $totalMarkup = floatval($item['total_price'] - $profit);
-                                    $markUp = floatval($item['total_price'] - $profit)/100;
-                                    print($item['total_price']*$markUp);
-
-                                ?></td>
+                                <td></td>
                                 <td>50 CAD<?php //echo $item['total_shipping_price_set']['shop_money']['amount']; ?></td>
                                 <td><?php if(isset($item['refunds'][0]['transactions'][0]['amount'])){echo $item['refunds'][0]['transactions'][0]['amount']." ".$item['refunds'][0]['transactions'][0]['currency'];} ?></td>
-                                <td><?php 
-                                    //$markUp = floatval($markUpAmount)/100;
-                                    
-                                    $earning = ($item['total_price'] - $profit)*$markUp;
-                                    print($earning); ?></td>
+                                <td></td>
 
                                 <td><?php echo $item['financial_status']; ?></td>
                                 <td><?php if(isset($item['payment_gateway_names'][0])){ echo $item['payment_gateway_names'][0]; } ?></td>

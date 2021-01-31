@@ -11,7 +11,6 @@ include "../inc/functions.php";
     }
 
     if(!(isset($_SESSION['user_id'])) && !(isset($_SESSION['adminId']))){
-
         header("Location: ../users_login.php");
 
     }
@@ -159,7 +158,7 @@ include "../inc/functions.php";
 
         }
 
-        function addToStore($product_name, $desc, $productImage, $productColor, $newPrice, $watchListId, $product_id, $profit, $stock ){
+        function addToStore($product_name, $desc, $productImage, $productColor, $newPrice, $watchListId, $product_id, $profit, $stock, $collectionId){
 
             $user_id = $this->getUserId();
             
@@ -171,7 +170,7 @@ include "../inc/functions.php";
 
                 $this->getConnection()->query($insertQuery);
 
-                $this->addToShopify($this->getConnection()->lastInsertId());
+                $this->addToShopify($this->getConnection()->lastInsertId(), $collectionId);
 
                 $this->deleteWatchList($watchListId);
 
@@ -207,7 +206,7 @@ include "../inc/functions.php";
 
         function getMarkup($storeName){
 
-            $getMarkupQuery = "select user_id from storeRetailer where storeName = '$storeName'";
+            $getMarkupQuery = "select user_id from storeRetailer where storeName = '$storeName.myshopify.com'";
             $userId = $this->getConnection()->query($getMarkupQuery)[0]['user_id'];
             $getGroupQuery = "select user_group_id from retailers where user_id = '$userId'";
             $getGroup = $this->getConnection()->query($getGroupQuery)[0]['user_group_id'];
@@ -226,7 +225,7 @@ include "../inc/functions.php";
             
         }
 
-         function createProductsShopify($data, $cost) {
+         function createProductsShopify($data, $cost, $collectionId) {
 
 
             $curStoreData = $this->getCurStoreUser();
@@ -247,6 +246,7 @@ include "../inc/functions.php";
             'tags' =>'' ,
             'published'=>1,
             'available' => $data['available'],
+            'collection_id' => $collectionId,
             'variants'=> [
                 [
                     'cost' => $data['productPrice']- $data['profit'],
@@ -318,12 +318,83 @@ include "../inc/functions.php";
             //print_r($products);
 
             $this->addShopifyIdCost($response, $cost);
-
+            $this->addProductCollection($collectionId, $response[0]);
             return array('headers' => $headers, 'response' => $response[0]);
 
         }
     }
 
+        function addProductCollection($collectionId, $product){
+
+            $productData = json_decode($product, true);
+            $productId = $productData['product']['id'];
+
+            $curStoreData = $this->getCurStoreUser();
+            $storeUrl = $curStoreData[0]['storeName'];
+            $api_key = "43c249091a227bea5ca0733355a3b05d";
+            $storeData = $this->getCurStoreData($storeUrl);
+            $storeTokken = $storeData[0]['access_token'];
+
+            $collect = [];
+
+            $collect['collect'] = [
+
+                "product_id" => $productId,
+                "collection_id" => $collectionId
+
+            ];
+        
+            $url = "https://".$storeUrl."/admin/api/2021-01/collects.json";
+
+            //$url = "https://" . $api_key . ":" .$storeTokken . "@" . $storeUrl ."/admin/products.json";
+
+            $curl = curl_init($url);
+            //curl_setopt($curl, CURLOPT_HEADER, TRUE);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
+            curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 3);
+            // curl_setopt($curl, CURLOPT_SSLVERSION, 3);
+            curl_setopt($curl, CURLOPT_USERAGENT, 'My New Shopify App v.1');
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($collect));
+
+            $request_headers[] = "X-Shopify-Access-Token: " . $storeTokken;
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array("X-Shopify-Access-Token: " . $storeTokken, "content-type:" . "application/json"));
+            
+            $response = curl_exec($curl);
+            $error_number = curl_errno($curl);
+            $error_message = curl_error($curl);
+            // Close cURL to be nice
+            curl_close($curl);
+
+            
+
+            // Return an error is cURL has a problem
+            if ($error_number) {
+                return $error_message;
+            } else {
+
+                // No error, return Shopify's response by parsing out the body and the headers
+                $response = preg_split("/\r\n\r\n|\n\n|\r\r/", $response, 2);
+
+                // Convert headers into an array
+                $headers = array();
+                $header_data = explode("\n",$response[0]);
+                $headers['status'] = $header_data[0]; // Does not contain a key, have to explicitly set
+                array_shift($header_data); // Remove status, we've already set it above
+                foreach($header_data as $part) {
+                    $h = explode(":", $part);
+                    $headers[trim($h[0])] = trim($h[1]);
+                }
+
+
+            }
+        }
+        
         function getCurStoreUser(){
 
             $curUser = $this->getUserId();
@@ -333,13 +404,13 @@ include "../inc/functions.php";
 
         }
 
-        function addToShopify($productList_id){
+        function addToShopify($productList_id, $collectionId){
             
-            $this->processProductsMigration($productList_id);
+            $this->processProductsMigration($productList_id, $collectionId);
 
         }
 
-        function processProductsMigration($productList_id){
+        function processProductsMigration($productList_id, $collectionId){
 		
             $results = array();
             $results['start-time'] = date('h:i:s');
@@ -365,7 +436,7 @@ include "../inc/functions.php";
     
                 
                 //$this->createProductsShopify($data, $storeName);
-                $response= $this->createProductsShopify($data, $products[0]['profit']);
+                $response= $this->createProductsShopify($data, $products[0]['profit'], $collectionId);
                 
                 //
                 //  $orders = $json['product'];
@@ -382,7 +453,7 @@ include "../inc/functions.php";
         function addShopifyIdCost($response, $cost){
 
                 $json = json_decode($response[0], true);
-
+            
                 $shopifyId = $json['product']['id'];
 
                 $insertShopifyIdCostQuery = "insert into shopifyCostId(shopifyId, cost) values('$shopifyId', '$cost')";
@@ -504,13 +575,28 @@ include "../inc/functions.php";
 
         }
 
+        function getOrdersFromAllStores(){
+
+            $allStores = $this->viewAllStores();
+            $allStoreData = [];
+            foreach($allStores as $store){
+
+                $storeData = $this->getOrdersFromStore($store['store_url']);
+                array_push($allStoreData, $storeData);
+
+            }
+
+            return $allStoreData;
+
+        }
+
         function getOrdersFromStore($store){
             
             $curStoreData = $this->getCurStoreData($store);
             $storeUrl = $curStoreData[0]['store_url'];
             $storeTokken = $curStoreData[0]['access_token'];
 
-            $orders = shopify_call($storeTokken, $store, "/admin/api/2021-01/orders.json", array("status"=>"any"), "GET");
+            $orders = shopify_call($storeTokken, $store, "/admin/api/2021-01/orders.json", array(), "GET");
             return $orders['response'];
 
         }
