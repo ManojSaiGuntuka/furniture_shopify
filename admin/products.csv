@@ -1,0 +1,8 @@
+productId,categoryId,productCode,Title,productStatus,productImage,shippingDate,productColor,productSize,productPrice
+30,351,A000,Teatable,Regular,Home-Wooden-Coffee-Table-Simple-Sofa.webp,2020-10-14 22:42,Black,04-Feb,16.99
+31,351,c004,Dinning chair,Sell,20160401_BG_A2_SmallTbl_Tall.jpg,2020-10-14 22:43,Gray,04-Apr,200.12
+41,353,B007,Twin Size Bed,Regular,10.jpeg,2020-11-04 1:37,White,06-May,199
+47,351,A02,Small Sofa ,sell,image1.jpg,2020-11-04 1:55,Gray,20inc,2000
+57,351,B009,Tea Table,Regular,mid.jpeg,2020-11-04 9:52,White,04-Apr,200.12
+58,353,B005,Double Size bed ,Regular,download.jpeg,2020-11-04 9:54,White,06-May,400.24
+59,353,B0012,Stylists Bed,Regular,default_name.png,2020-11-04 9:58,Blue,06-May,500.22

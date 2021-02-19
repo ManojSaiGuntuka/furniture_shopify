@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      
+      <style type="text/css">
+  
+.tab-pane {
+    padding:20px;
+}
+
+</style>
+   </head>
+
+<script>
+  $(document).ready(function(){
+  $('#myForm a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+});
+</script>
+<ul class="nav nav-tabs" id="myForm">
+      <li class="active"><a href="#one">Un</a></li>
+      <li><a href="#two">Deux</a></li>
+      <li><a href="#three">Trois</a></li>
+      </ul>
+
+    <form action="" method="post">
+      <div class="tab-content">
+        <div class="tab-pane active" id="one">
+          <input type="text" class="form-control" name="name" placeholder="enter name">
+        </div>
+        <div class="tab-pane" id="two">
+          <input type="text" class="form-control" name="email" placeholder="enter email">
+        </div>
+        <div class="tab-pane" id="three">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>    
+      </div>
+    </form>
+
+
+</html>

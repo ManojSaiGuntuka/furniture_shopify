@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .order-dashboard {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .orderStatics {
+    width: 45%;
+    border: 1px solid black;
+    text-transform: uppercase;
+    margin-left: 28%;
+    margin-top: 2%;
+  }
+  
+  .orderButton {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+  }
+  
+  .orderbtn {
+    display: flex;
+    font-weight: 300;
+    text-decoration: none;
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+    width: 261px;
+    height: 100px;
+    color: #fff;
+    flex: 1 1 200px;
+    justify-content: center;
+  }
+  
+  .orderbtn a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .order-detail {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+  }
+  
+  .order-detail span {
+    color: #fff;
+    padding-left: 10px;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  
+  .order-nos {
+    font-size: 20px !important;
+  }
+  
+  .icon {
+    background-color: rgba(83, 5, 5, 0.15);
+    mix-blend-mode: normal;
+    fill: #fff;
+    border: 4px solid transparent;
+    height: 100%;
+    width: 40%;
+  }
+  .title {
+    background-color: rgb(56, 56, 194);
+    color: #fff;
+    padding: 10px;
+  }
+  
+  .totalOrder {
+    background-color: rgb(91, 91, 248);
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .processedOrder {
+    background-color: rgb(209, 140, 10);
+    margin-bottom: 15px;
+  }
+  
+  .cancelledOrder {
+    background-color: rgb(223, 73, 19);
+    margin-right: 15px;
+  }
+  
+  .completedOrder {
+    background-color: rgb(30, 167, 30);
+  }
+  
+  .order-table {
+    overflow-y: auto;
+    margin: 30px;
+  }
+  
+  table.order-table_table {
+    background-color: #fff;
+    width: 100%;
+  }
+  
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  thead,
+  tr,
+  tbody,
+  th,
+  td {
+    border: 2px solid #d0d0d5;
+  }
+  .order-table_tbody td {
+    padding: 10px 0 15px 0;
+    text-align: center;
+  }
+  
+  .order-table_tbody tr:nth-child(even) {
+    background: rgba(235, 236, 239, 0.81);
+  }
+  
+  .user-name,
+  .store-name {
+    text-align: justify !important;
+    padding-left: 10px !important;
+  }
+  
+  .order-table_tbody .cancelledbtn a {
+    background-color: rgb(17, 148, 209);
+    border-radius: 3px;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+  }
+  
+  .order-no,
+  .date-time,
+  .payment-mode,
+  .action {
+    text-align: center;
+  }
